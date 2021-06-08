@@ -1,6 +1,13 @@
 // Imports
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  NavLink,
+  Redirect,
+  Switch,
+  Route,
+  Link
+} from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
 // CSS
@@ -67,20 +74,22 @@ function App() {
 
 
   return (
-    <div className="App">
-      <Navbar isAuth={isAuthenticated} handleLogout={handleLogout} />
-      <div className="container mt-5">
-        <Switch>
-          {/* routes will go here */}
-          <Route path='/signup' component={Signup} />
-          <Route path='/login' render={ (props) => <Login {...props} user={currentUser} nowCurrentUser={nowCurrentUser} setIsAuthenticated={setIsAuthenticated} />} />
-          <Route path='/about' component={About} />
-          <Route exact path='/' component={Welcome} />
-          <PrivateRoute path='/profile' component={Profile} user={currentUser} handleLogout={handleLogout} />
-        </Switch>
+    <Router>
+      <div className="App">
+        <Navbar isAuth={isAuthenticated} handleLogout={handleLogout} />
+        <div className="container mt-5">
+          <Switch>
+            {/* routes will go here */}
+            <Route path='/signup' component={Signup} />
+            <Route path='/login' render={ (props) => <Login {...props} user={currentUser} nowCurrentUser={nowCurrentUser} setIsAuthenticated={setIsAuthenticated} />} />
+            <Route path='/about' component={About} />
+            <Route exact path='/' component={Welcome} />
+            <PrivateRoute path='/profile' component={Profile} user={currentUser} handleLogout={handleLogout} />
+          </Switch>
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </Router>
   );
 }
 
