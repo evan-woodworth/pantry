@@ -6,7 +6,7 @@ Manage your pantry, plan meals, and generate shopping lists!
 
 ### Evan's Future Lucid Chart
 
-![img](./public/img/Pantry-ERD.png)
+![img](./img/Pantry-ERD.png)
 
 ### Overview
 
