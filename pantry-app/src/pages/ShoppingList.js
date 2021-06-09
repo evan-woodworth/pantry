@@ -1,5 +1,3 @@
-import React from 'react'
-
 // Generate a shopping list from recipe’s ingredients
 
 // When a shopping list is generated:
@@ -15,18 +13,37 @@ import React from 'react'
 // If recipeIngredient is in pantryIngredients, add recipeIngredient to shoppingList
 // If user is not signed in, all recipeIngredients are added to shoppingList
 
+import React, { useState, useEffect } from 'react'
 
-const ShoppingList = () => {
+function App() {
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log('-------BOOM---------')
+  }
+
+  const List = () => {
+    return <h2>list component</h2>
+  }
+
   return (
-    <div>
-      <h1>My Shopping List</h1>
-      <p>
-        Write a function that uses the "ShoppingList" collection to list all the needed items.
-      </p>
-      <li>User should have a way to add items</li>
-      <li>User should have a way to edit items</li>
-      <li>User should be able to remove items</li>
-    </div>
+    <section className=''>
+      <form action='' onSubmit={handleSubmit}>
+        <h2>Shopping List</h2>
+        <div className=''>
+          <input type='text' placeholder='Add item here' />
+          <button type='submit' className=''>
+            submit
+          </button>
+        </div>
+      </form>
+      <div className=''>
+        <List />
+        <button type='submit' className=''>
+          clear list
+        </button>
+      </div>
+    </section>
   )
 }
-export default ShoppingList
+
+export default App
