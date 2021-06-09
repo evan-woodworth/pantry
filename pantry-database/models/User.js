@@ -25,7 +25,9 @@ const userSchema = new Schema({
     date: {
         type: Date,
         default: Date.now()
-    }
+    },
+    pantries: [{type: mongoose.Schema.Types.ObjectId, ref: "Pantry"}],
+    recipes: [{type: mongoose.Schema.Types.ObjectId, ref: "Recipe"}]
 })
 
 const User = mongoose.model('User', userSchema);
