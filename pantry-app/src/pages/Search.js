@@ -1,5 +1,6 @@
 import React from 'react'
 
+// Display search results
 
 const Search = () => {
   return (

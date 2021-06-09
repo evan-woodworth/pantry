@@ -1,5 +1,21 @@
 import React from 'react'
 
+// Generate a shopping list from recipe’s ingredients
+
+// When a shopping list is generated:
+// A shopping list generated locally in an object
+// - if user is signed in, they can save the shopping list (list is created in the database and associated with a pantry)
+
+// Shopping list generation:
+// Pull ingredients from recipe -> recipeIngredients
+// Create an empty shopping list -> shoppingList
+// If the user is signed in
+// pull ingredients from a pantry -> pantryIngredients
+// Iterate through recipeIngredients
+// If recipeIngredient is in pantryIngredients, add recipeIngredient to shoppingList
+// If user is not signed in, all recipeIngredients are added to shoppingList
+
+
 const ShoppingList = () => {
   return (
     <div>

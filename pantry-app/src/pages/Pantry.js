@@ -1,5 +1,7 @@
 import React from 'react'
 
+// Display ingredients in a pantry
+
 const Pantry = () => {
   return (
     <div>

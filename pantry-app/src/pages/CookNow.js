@@ -1,5 +1,8 @@
 import React from 'react'
 
+// Query your favorited recipes to determine what you can make 
+// with the ingredients in your pantry
+
 const CookNow = () => {
   return (
     <div>

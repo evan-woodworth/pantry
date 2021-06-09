@@ -1,5 +1,6 @@
 import React from 'react'
 
+// Display a recipe and its details and ingredients
 
 const RecipeInfo = () => {
   return (
