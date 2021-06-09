@@ -1,5 +1,6 @@
 import React from 'react'
 
+// Display a user’s favorited recipes
 
 const MyRecipes = () => {
   return (
