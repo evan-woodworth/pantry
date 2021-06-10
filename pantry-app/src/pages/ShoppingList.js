@@ -14,36 +14,144 @@
 // If user is not signed in, all recipeIngredients are added to shoppingList
 
 import React, { useState, useEffect } from 'react'
+import Data from './Ingredients'
+
+const getLocalStorage = () => {
+  let list = localStorage.getItem('list')
+  if (list) {
+    return (list = JSON.parse(localStorage.getItem('list')))
+  } else {
+    return []
+  }
+}
+
+const Alert = ({ type, msg, removeAlert, list }) => {
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      removeAlert()
+    }, 3000)
+    return () => clearTimeout(timeout)
+  }, [list])
+  return <p className={`alert ${type}`}>{msg}</p>
+}
+
+const List = ({ items, removeItem, editItem }) => {
+  return (
+    <div className=''>
+      {items.map((item) => {
+        const { id, title } = item
+        return (
+          <article className='item' key={id}>
+            <p className=''>{title}</p>
+            <div className=''>
+              <button
+                type='submit'
+                className='btn'
+                onClick={() => editItem(id)}
+              >
+                edit
+              </button>
+              <button
+                type='submit'
+                className='btn'
+                onClick={() => removeItem(id)}
+              >
+                delete
+              </button>
+            </div>
+          </article>
+        )
+      })}
+    </div>
+  )
+}
 
 function App() {
+  const [name, setName] = useState('')
+  const [list, setList] = useState(getLocalStorage())
+  const [isEditing, setIsEditing] = useState(false)
+  const [editID, setEditID] = useState(null)
+  const [alert, setAlert] = useState({ show: false, msg: '', type: '' })
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log('-------BOOM---------')
+    if (!name) {
+      showAlert(true, 'danger', 'please enter value')
+    } else if (name && isEditing) {
+      setList(
+        list.map((item) => {
+          if (item.id === editID) {
+            return { ...item, title: name }
+          }
+          return item
+        })
+      )
+      setName('')
+      setEditID(null)
+      setIsEditing(false)
+      showAlert(true, 'success', 'value changed')
+    } else {
+      showAlert(true, 'success', 'item added to the list')
+      const newItem = { id: new Date().getTime().toString(), title: name }
+
+      setList([...list, newItem])
+      setName('')
+    }
   }
 
-  const List = () => {
-    return <h2>list component</h2>
+  const showAlert = (show = false, type = '', msg = '') => {
+    setAlert({ show, type, msg })
   }
-
+  const clearList = () => {
+    showAlert(true, 'danger', 'empty list')
+    setList([])
+  }
+  const removeItem = (id) => {
+    showAlert(true, 'danger', 'item removed')
+    setList(list.filter((item) => item.id !== id))
+  }
+  const editItem = (id) => {
+    const specificItem = list.find((item) => item.id === id)
+    setIsEditing(true)
+    setEditID(id)
+    setName(specificItem.title)
+  }
+  useEffect(() => {
+    localStorage.setItem('list', JSON.stringify(list))
+  }, [list])
   return (
     <section className=''>
-      <form action='' onSubmit={handleSubmit}>
-        <h2>Shopping List</h2>
-        <div className=''>
-          <input type='text' placeholder='Add item here' />
-          <button type='submit' className=''>
-            submit
+      <form className='' onSubmit={handleSubmit}>
+        {alert.show && <Alert {...alert} removeAlert={showAlert} list={list} />}
+
+        <h3>shopping list</h3>
+        <div className='item'>
+          <input
+            type='text'
+            className=''
+            placeholder='Add items here'
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <button type='submit' className='btn'>
+            {isEditing ? 'edit' : 'submit'}
           </button>
         </div>
       </form>
-      <div className=''>
-        <List />
-        <button type='submit' className=''>
-          clear list
-        </button>
+      {list.length > 0 && (
+        <div className=''>
+          <List items={list} removeItem={removeItem} editItem={editItem} />
+          <button className='btn' onClick={clearList}>
+            clear items
+          </button>
+        </div>
+      )}
+      <div>
+        <Data />
       </div>
     </section>
   )
 }
+
+
 
 export default App
