@@ -8,7 +8,11 @@ const PORT = process.env.PORT || 8000;
 
 // API
 const users = require('./api/users');
-const ingredients = require('./api/ingredients')
+const ingredients = require('./api/ingredients');
+const categories = require('./api/categories');
+const mealdb = require('./api/mealdb');
+const pantries = require('./api/pantries');
+const recipes = require('./api/recipes');
 
 // Middleware
 app.use(cors());
@@ -27,6 +31,12 @@ app.get('/', (req, res) => {
 // Routes
 app.use('/api/users', users);
 app.use('/api/ingredients', ingredients)
+app.use('/api/categories', categories)
+app.use('/api/pantries', pantries)
+app.use('/api/recipes', recipes)
+
+// External API routes
+app.use('/api/mealdb', mealdb)
 
 app.get('/*', (req, res) => {
     res.status(404).json({ message: 'Data not found' });

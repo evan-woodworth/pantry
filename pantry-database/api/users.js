@@ -8,7 +8,7 @@ const passport = require('passport');
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Models
-const { User } = require('../models')
+const { User, Recipe, Pantry, Ingredient } = require('../models')
 
 // controllers
 const test = async (req, res) => {
@@ -111,16 +111,170 @@ const profile = async (req,res) => {
     });
 }
 
-// routes
-router.get('/test', test);
+const recipes = async (req,res) => {
+    console.log("Inside of users/recipes route");
 
+    // retrieve user details
+    let user = await User.findById(req.user.id);
+
+    // retrieve recipes associated with user
+    let recipeList = [];
+    user.recipes.forEach(async item=>{
+        let theRecipe = await Recipe.findById(item.id);
+        recipeList.push(theRecipe);
+    })
+     
+    // display recipes
+    res.json(recipeList);
+}
+
+const fetchAuthorizedPantries = async (user) => {
+    // retrieve pantries associated with user
+    let pantryList = [];
+
+    user.pantries.forEach(async item=>{
+        let thePantry = await Pantry.findById(item.id);
+        pantryList.push(thePantry);
+    })
+
+    // sort for authorized pantries
+    let authorizedPantries = [];
+    pantryList.forEach(pantry=>{
+        pantry.users.forEach(pantryUser=>{
+            if ( pantryUser.user.id === user.id ) authorizedPantries.push(pantry);
+        })
+    })
+
+    return authorizedPantries;
+}
+
+const pantries = async (req,res) => {
+    console.log("Inside of users/pantries route");
+
+    // retrieve user details
+    let user = await User.findById(req.user.id);
+
+    // retrieve authorized pantries
+    let authorizedPantries = await fetchAuthorizedPantries(user);
+
+    // display pantries
+    res.json(authorizedPantries);
+}
+const fetchShoppingLists = async (req,res) => {
+    console.log("Inside of users/shoppingLists route");
+
+    // retrieve user details
+    let user = await User.findById(req.user.id);
+
+    // retrieve authorized pantries
+    let authorizedPantries = await fetchAuthorizedPantries(user);
+
+    // retrieve user's shopping lists from pantries
+    userLists = [];
+    authorizedPantries.forEach(pantry=>{
+        pantry.shoppingLists.forEach(list=>{
+            if ( user.id === list.owner.id ) {
+                userLists.push(list);
+            } else {
+                list.shoppers.forEach(shopper=>{
+                    if ( user.id === shopper.id ) userLists.push(list);
+                })
+            }
+        })
+    })
+    // display lists
+    res.json(userLists);
+}
+
+const addRecipe = async (req,res) => {
+    console.log( "Inside of put users/recipes route" );
+    const { name, mealId, category, area, thumbnail, tags, 
+        instructions, ingredients, public, youtubeUrl } = req.body;
+
+    try {
+        // retrieve user
+        let user = await User.findById(req.user.id);
+
+        // retrieve recipe by id
+        let recipe = await Recipe.findOne({ mealId });
+
+        // if no recipe, create recipe
+        if (!recipe) {
+            console.log('creating recipe')
+            recipe = new Recipe({
+                name, mealId, category, area, thumbnail, tags,
+                instructions, public, youtubeUrl
+            })
+            recipe.author = user;
+            ingredients.forEach(async ing => {
+                let addIng = Ingredient.findOne({name:ing.name});
+                recipe.ingredients.push({
+                    addIng,
+                    measurement: ing.measurement
+                })
+            })
+            const savedRecipe = recipe.save();
+            res.json(savedRecipe)
+        }
+        // add recipe to user
+        user.recipes.push(recipe);
+
+        // save user
+        user.save()
+
+    } catch (error) {
+        console.log("Error inside of put users/recipes route");
+        console.log(error);
+        return res.status(400).json({ message: 'Recipe could not be added, please try again.' });
+    }
+}
+
+const addPantry = async (req,res) => {
+    const { id } = req.params;
+    console.log( "Inside of put users/pantries route" );
+
+    try {
+        // retrieve user
+        let user = await User.findById(req.user.id);
+
+        // retrieve recipe by id
+        let pantry = await Pantry.findById(id);
+
+        // add pantry to user
+        user.pantries.push(pantry);
+
+        // save user
+        user.save()
+
+    } catch (error) {
+        console.log("Error inside of put users/pantries route");
+        console.log(error);
+        return res.status(400).json({ message: 'Pantry could not be added, please try again.' });
+    }
+}
+
+// routes
+// get
+router.get('/test', test);
+// GET api/users/profile (Private)
+router.get('/profile', passport.authenticate('jwt', { session: false }), profile);
+// GET api/users/recipes (Private)
+router.get('/recipes', passport.authenticate('jwt', { session: false }), recipes);
+// GET api/users/pantries (Private)
+router.get('/pantries', passport.authenticate('jwt', { session: false }), pantries);
+// GET api/users/shoppingLists (Private)
+router.get('/shoppingLists', passport.authenticate('jwt', { session: false }), fetchShoppingLists);
+
+// post
 // POST api/users/register (Public)
 router.post('/signup', signup);
-
 // POST api/users/login (Public)
 router.post('/login', login);
 
-// GET api/users/profile (Private)
-router.get('/profile', passport.authenticate('jwt', { session: false }), profile);
+// put
+// PUT api/users/recipes/:id (Private)
+router.put('/recipes', addRecipe)
+// PUT api/users/pantries/:id (Private)
+router.put('/pantries/:id', addPantry)
 
 module.exports = router; 
