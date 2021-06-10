@@ -8,7 +8,7 @@ const passport = require('passport');
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Models
-const { User, Recipe, Pantry } = require('../models')
+const { User, Recipe, Pantry, Ingredient } = require('../models')
 
 // Controllers
 const test = async (req, res) => {
@@ -187,16 +187,35 @@ const fetchShoppingLists = async (req,res) => {
 }
 
 const addRecipe = async (req,res) => {
-    const { id } = req.params;
     console.log( "Inside of put users/recipes route" );
+    const { name, mealId, category, area, thumbnail, tags, 
+        instructions, ingredients, public, youtubeUrl } = req.body;
 
     try {
         // retrieve user
         let user = await User.findById(req.user.id);
 
         // retrieve recipe by id
-        let recipe = await Recipe.findById(id);
+        let recipe = await Recipe.findOne({ mealId });
 
+        // if no recipe, create recipe
+        if (!recipe) {
+            console.log('creating recipe')
+            recipe = new Recipe({
+                name, mealId, category, area, thumbnail, tags,
+                instructions, public, youtubeUrl
+            })
+            recipe.author = user;
+            ingredients.forEach(async ing => {
+                let addIng = Ingredient.findOne({name:ing.name});
+                recipe.ingredients.push({
+                    addIng,
+                    measurement: ing.measurement
+                })
+            })
+            const savedRecipe = recipe.save();
+            res.json(savedRecipe)
+        }
         // add recipe to user
         user.recipes.push(recipe);
 
@@ -235,29 +254,26 @@ const addPantry = async (req,res) => {
 }
 
 // routes
+// get
 router.get('/test', test);
-
-// POST api/users/register (Public)
-router.post('/signup', signup);
-
-// POST api/users/login (Public)
-router.post('/login', login);
-
 // GET api/users/profile (Private)
 router.get('/profile', passport.authenticate('jwt', { session: false }), profile);
-
 // GET api/users/recipes (Private)
 router.get('/recipes', passport.authenticate('jwt', { session: false }), recipes);
-
 // GET api/users/pantries (Private)
 router.get('/pantries', passport.authenticate('jwt', { session: false }), pantries);
-
 // GET api/users/shoppingLists (Private)
 router.get('/shoppingLists', passport.authenticate('jwt', { session: false }), fetchShoppingLists);
 
-// PUT api/users/recipes/:id (Private)
-router.put('/recipes/:id', addRecipe)
+// post
+// POST api/users/register (Public)
+router.post('/signup', signup);
+// POST api/users/login (Public)
+router.post('/login', login);
 
+// put
+// PUT api/users/recipes/:id (Private)
+router.put('/recipes', addRecipe)
 // PUT api/users/pantries/:id (Private)
 router.put('/pantries/:id', addPantry)
 
