@@ -17,8 +17,16 @@ db.on('error', (error)=>console.log(`Database error`, error));
 
 // Import all of your models
 const User = require('./User');
+const Ingredient = require('./Ingredient');
+const Pantry = require('./Pantry');
+const Recipe = require('./Recipe');
+const Category = require('./Category');
 
 // export all of the models from this file
 module.exports = {
-    User
+    User,
+    Ingredient,
+    Pantry,
+    Recipe,
+    Category
 }
