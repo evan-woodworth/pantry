@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 // import userEvent from '@testing-library/user-event';
-import Search from './Search'
-
-
-
 
 
 const RecipeInfo = (props) => {
 
-
   const [recipes, setRecipes] = useState([])
-
 
   useEffect(() => {
     getRecipes();
@@ -21,7 +15,6 @@ const RecipeInfo = (props) => {
     console.log(recipes)
     console.log(recipes)
   }, [])
-
 
 
   const getRecipes = () => {
@@ -35,12 +28,6 @@ const RecipeInfo = (props) => {
         console.log(`Hers's the error you made: ${error}`)
       })
   };
-
-
-
-
-
-
 
 
   return (
@@ -63,9 +50,6 @@ const RecipeInfo = (props) => {
         <li>{recipes.strIngredient8}</li>
         <li>{recipes.strIngredient9}</li>
       </ul>
-
-
-      
        <a href="{recipes[0].strYoutube}" target="_blank">Youtube</a>
        <br />
       <button onClick={props.history.goBack}>GO Back</button>
