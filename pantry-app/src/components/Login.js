@@ -25,14 +25,10 @@ const Login = (props) => {
         axios.post(`${REACT_APP_SERVER_URL}/api/users/login`, userData)
         .then(response => {
             const { token } = response.data;
-            // Save token to localStorage
-            localStorage.setItem('jwtToken', token);
-            // Set token to auth header
-            setAuthToken(token);
-            // Decode token to get the user data
-            const decoded = jwt_decode(token);
-            // Set current user
-            props.nowCurrentUser(decoded);
+            localStorage.setItem('jwtToken', token);    // Save token to localStorage
+            setAuthToken(token);                        // Set token to auth header
+            const decoded = jwt_decode(token);          // Decode token to get the user data
+            props.nowCurrentUser(decoded);              // Set current user
         })
         .catch(error =>{
             console.log(error);
