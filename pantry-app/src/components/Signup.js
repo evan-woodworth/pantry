@@ -13,16 +13,20 @@ const Signup = () => {
     
     const handleName = (e) => {
         setName(e.target.value);
-    }
+    };
+
     const handleEmail = (e) => {
         setEmail(e.target.value);
-    }
+    };
+
     const handlePassword = (e) => {
         setPassword(e.target.value);
-    }
+    };
+
     const handleConfirmPassword = (e) => {
         setConfirmPassword(e.target.value);
-    }
+    };
+    
     const handleSubmit = (e) => {
         e.preventDefault();
         // check to make sure passwords match
