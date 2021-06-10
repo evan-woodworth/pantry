@@ -26,18 +26,18 @@ const fetchOneById = async (req, res) => {
         return res.status(400).json({message:'Ingredient not found, please try again.'})
     }
 }
-// fetch one by name
-const fetchOneByName = async (req, res) => {
+// fetch all by name
+const fetchAllByName = async (req, res) => {
     const { name } = req.params;
     console.log('--- Inside of Ingredient fetchOneByName ---');
     console.log(`Searching for ${name}`);
     try {
-        let theIngredient = await Ingredient.findOne({ name: name });
-        res.json({ theIngredient });
+        let theIngredients = await Ingredient.find({ name: { $regex: `${name}`, $options: 'i' } });
+        res.json({ theIngredients });
     } catch (error) {
         console.log("Error inside of /ingredients/name/:name");
         console.log(error);
-        return res.status(400).json({message:'Ingredient not found, please try again.'})
+        return res.status(400).json({message:'Ingredients not found, please try again.'})
     }
 }
 // fetch all ingredients
@@ -57,7 +57,7 @@ const fetchAll = async (req, res) => {
 // routes
 router.get('/test', test)
 router.get('/id/:id', fetchOneById)
-router.get('/name/:name', fetchOneByName)
+router.get('/name/:name', fetchAllByName)
 router.get('/', fetchAll)
 
 module.exports = router; 

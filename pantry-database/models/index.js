@@ -20,7 +20,6 @@ const User = require('./User');
 const Ingredient = require('./Ingredient');
 const Pantry = require('./Pantry');
 const Recipe = require('./Recipe');
-const ShoppingList = require('./ShoppingList');
 const Category = require('./Category');
 
 // export all of the models from this file
@@ -29,6 +28,5 @@ module.exports = {
     Ingredient,
     Pantry,
     Recipe,
-    ShoppingList,
     Category
 }
