@@ -1,14 +1,14 @@
 import React from 'react'
 import { useParams, Link } from 'react-router-dom'
 
-export default function SingleCocktail() {
+export default function SingleMeal() {
   const { id } = useParams()
   const [loading, setLoading] = React.useState(false)
-  const [cocktail, setCocktail] = React.useState(null)
+  const [meal, setMeal] = React.useState(null)
 
   React.useEffect(() => {
     setLoading(true)
-    async function getCocktail() {
+    async function getMeal() {
       try {
         const response = await fetch(
           `https://www.themealdb.com/api/json/v1/1/filter.php?i=${id}`
@@ -34,7 +34,7 @@ export default function SingleCocktail() {
             strIngredient4,
             strIngredient5,
           ]
-          const newCocktail = {
+          const newMeal = {
             name,
             image,
             info,
@@ -42,21 +42,21 @@ export default function SingleCocktail() {
             instructions,
             ingredients,
           }
-          setCocktail(newCocktail)
+          setMeal(newMeal)
         } else {
-          setCocktail(null)
+          setMeal(null)
         }
       } catch (error) {
         console.log(error)
       }
       setLoading(false)
     }
-    getCocktail()
+    getMeal()
   }, [id])
-  if (!cocktail) {
+  if (!meal) {
     return <h2 className='section-title'>no meal to display</h2>
   } else {
-    const { name, image, category, info, instructions, ingredients } = cocktail
+    const { name, image, category, info, instructions, ingredients } = meal
     return (
       <section className='section meal-section'>
         <Link to='/' className='btn btn-primary'>

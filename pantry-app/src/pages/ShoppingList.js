@@ -17,7 +17,7 @@ import React, { useState, useEffect } from 'react'
 import Data from './Ingredients'
 import Api from '../AppTwo'
 import { AppProvider } from '../context'
-import CocktailList from '../components/RecipeApi/MealList'
+import MealList from '../components/RecipeApi/MealList'
 import SearchForm from '../components/RecipeApi/SearchForm'
 
 const getLocalStorage = () => {
@@ -156,7 +156,7 @@ function App() {
         <AppProvider>
           <Api />
           <SearchForm />
-          <CocktailList />
+          <MealList />
         </AppProvider>
       </div>
     </section>
