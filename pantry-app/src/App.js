@@ -20,7 +20,7 @@ import Pantry from './pages/Pantry'
 import MyRecipes from './pages/MyRecipes'
 import CookNow from './pages/CookNow'
 
-// import Search from './pages/Search'
+import Search from './pages/Search'
 import ShoppingList from './pages/ShoppingList'
 import RecipeInfo from './pages/RecipeInfo'
 import AddRecipe from './pages/AddRecipe'
@@ -97,7 +97,7 @@ function App() {
               user={currentUser}
             />
 
-            {/* <Route path='/search' component={Search} user={currentUser} /> */}
+            <Route path='/?search' component={Search} user={currentUser} />
 
             <Route
               path='/shoppinglist'

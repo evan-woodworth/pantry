@@ -1,14 +1,14 @@
-import React from 'react';
+import React from "react";
 
 
 const Search = (props) => {
-  console.log(props);
-  
+  console.log('Props inside ./pages/Search:', props)
+
   return (
     <div>
-    <h2>Search Page</h2>
+      <p>Search Results Page</p>
     </div>
-  )
+  );
 };
 
 export default Search;
