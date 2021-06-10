@@ -15,6 +15,10 @@
 
 import React, { useState, useEffect } from 'react'
 import Data from './Ingredients'
+import Api from '../AppTwo'
+import { AppProvider } from '../context'
+import CocktailList from '../components/RecipeApi/MealList'
+import SearchForm from '../components/RecipeApi/SearchForm'
 
 const getLocalStorage = () => {
   let list = localStorage.getItem('list')
@@ -148,10 +152,15 @@ function App() {
       <div>
         <Data />
       </div>
+      <div>
+        <AppProvider>
+          <Api />
+          <SearchForm />
+          <CocktailList />
+        </AppProvider>
+      </div>
     </section>
   )
 }
-
-
 
 export default App
