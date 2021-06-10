@@ -1,9 +1,8 @@
 import React from 'react';
-// import {Route} from 'react-router-dom';
 import SearchBar from './SearchBar';
-// import Search from '../pages/Search';
 
-const Welcome = () => {
+
+const Welcome = (props) => {
     return (
         <div>
             <h1>Welcome</h1>
