@@ -13,8 +13,12 @@
 // If recipeIngredient is in pantryIngredients, add recipeIngredient to shoppingList
 // If user is not signed in, all recipeIngredients are added to shoppingList
 
-import React, { useState, useEffect } from "react";
-import Data from "./Ingredients";
+import React, { useState, useEffect } from 'react'
+import Data from './Ingredients'
+import Api from '../AppTwo'
+import { AppProvider } from '../context'
+import MealList from '../components/RecipeApi/MealList'
+import SearchForm from '../components/RecipeApi/SearchForm'
 
 
 const getLocalStorage = () => {
@@ -129,6 +133,13 @@ function App() {
       )}
       <div>
         <Data />
+      </div>
+      <div>
+        <AppProvider>
+          <Api />
+          <SearchForm />
+          <MealList />
+        </AppProvider>
       </div>
     </section>
   );
