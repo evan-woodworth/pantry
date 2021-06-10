@@ -57,32 +57,57 @@ class SearchBar extends Component {
 export default SearchBar;
 
 
+
 // ===============================
-// ORIGINAL SEARCH-BAR CODE
+// WORKING ORIGINAL SEARCH-BAR CODE
 // ===============================
-import React, {useState} from 'react';
 import axios from 'axios';
+import React, {useState} from 'react';
+import {Redirect, Route} from 'react-router-dom';
+import Search from '../pages/Search';
+const KEY = process.env.REACT_APP_KEY
 
 const SearchBar = () => {
-    const [state, setState] = useState('');
+    const [search, setSearch] = useState('');
+    const [result, setResult] = useState([]);
 
     const handleInput = (e) => {
-        setState({...state, [e.target.name]: e.target.value});
+        setSearch(e.target.value);
     };
 
-    const submitForm = async (e) => {
+    const submitForm = (e) => {
         e.preventDefault();
-        console.log(state);
+        fetchData(search);
+    };
+
+    const fetchData = async (searchInput) => {
+        console.log('Search Input:', searchInput);
+        const URL = `https://www.themealdb.com/api/json/v2/${KEY}/filter.php?i=${searchInput}`;
+        try {
+            let response = await axios.get(URL)
+            let data = response.data.meals
+            console.log(data);
+            setResult(data);
+        } catch (error) {
+            console.log('---------------- ERROR ----------------');
+            console.log(error);
+        };
     };
 
     return (
-        <form onSubmit={submitForm}>
-            <div className="form-group">
-                <label htmlFor="search" />
-                <input type="text" name="search" value={state.value} onChange={handleInput} className="form-control" />
+        <div>
+            <form onSubmit={submitForm}>
+                <div className="form-group">
+                    <label htmlFor="search" />
+                    <input type="text" name="search" value={search.value} onChange={handleInput} className="form-control" />
+                </div>
+                <button type="submit" className="btn btn-primary">Search</button>
+            </form>
+        
+            <div>
+                <Route path='/search' render={(props) => <Search  {...props} result={result}/>} />
             </div>
-            <button type="submit" className="btn btn-primary">Search</button>
-        </form>
+        </div>
     )
 };
 

@@ -19,7 +19,8 @@ import About from './components/About'
 import Pantry from './pages/Pantry'
 import MyRecipes from './pages/MyRecipes'
 import CookNow from './pages/CookNow'
-import Search from './pages/Search'
+
+// import Search from './pages/Search'
 import ShoppingList from './pages/ShoppingList'
 import RecipeInfo from './pages/RecipeInfo'
 import AddRecipe from './pages/AddRecipe'
@@ -30,7 +31,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   console.log('This is a private route...')
   let user = localStorage.getItem('jwtToken')
   return (<Route {...rest} render={(props) => {
-      return user ? (<Component {...rest} {...props} />) : (<Redirect to='/login' />) }} />
+      return user ? (<Component {...rest} {...props} />) : (<Redirect to='/login' />)}} />
   )
 }
 
@@ -96,7 +97,7 @@ function App() {
               user={currentUser}
             />
 
-            <Route path='/search' component={Search} user={currentUser} />
+            {/* <Route path='/search' component={Search} user={currentUser} /> */}
 
             <Route
               path='/shoppinglist'

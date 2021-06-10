@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
+import SearchBar from './SearchBar';
 
 const Navbar = (props) => {
   return (
@@ -17,8 +18,8 @@ const Navbar = (props) => {
             <li className='nav-item'> <NavLink className='nav-link' to='/about'> About </NavLink></li>
             <li className='nav-item'> <NavLink className='nav-link' to='/recipeinfo'> Recipe Info </NavLink></li>
             <li className='nav-item'> <NavLink className='nav-link' to='/shoppinglist'> Shopping List </NavLink></li>
-            <li className='nav-item'> <NavLink className='nav-link' to='/search'> Search </NavLink></li>
-            {/* <SearchBar /> */}
+            {/* <li className='nav-item'> <NavLink className='nav-link' to='/search'> Search </NavLink></li> */}
+            <SearchBar />
           </ul>
           
           {props.isAuth ? (
