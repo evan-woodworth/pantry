@@ -187,7 +187,7 @@ const fetchShoppingLists = async (req,res) => {
 }
 
 const addRecipe = async (req,res) => {
-    const { id } = req.params;
+    const { mealId } = req.params;
     console.log( "Inside of put users/recipes route" );
 
     try {
@@ -195,7 +195,7 @@ const addRecipe = async (req,res) => {
         let user = await User.findById(req.user.id);
 
         // retrieve recipe by id
-        let recipe = await Recipe.findById(id);
+        let recipe = await Recipe.findOne({ mealId });
 
         // add recipe to user
         user.recipes.push(recipe);
@@ -235,29 +235,26 @@ const addPantry = async (req,res) => {
 }
 
 // routes
+// get
 router.get('/test', test);
-
-// POST api/users/register (Public)
-router.post('/signup', signup);
-
-// POST api/users/login (Public)
-router.post('/login', login);
-
 // GET api/users/profile (Private)
 router.get('/profile', passport.authenticate('jwt', { session: false }), profile);
-
 // GET api/users/recipes (Private)
 router.get('/recipes', passport.authenticate('jwt', { session: false }), recipes);
-
 // GET api/users/pantries (Private)
 router.get('/pantries', passport.authenticate('jwt', { session: false }), pantries);
-
 // GET api/users/shoppingLists (Private)
 router.get('/shoppingLists', passport.authenticate('jwt', { session: false }), fetchShoppingLists);
 
-// PUT api/users/recipes/:id (Private)
-router.put('/recipes/:id', addRecipe)
+// post
+// POST api/users/register (Public)
+router.post('/signup', signup);
+// POST api/users/login (Public)
+router.post('/login', login);
 
+// put
+// PUT api/users/recipes/:id (Private)
+router.put('/recipes/:mealId', addRecipe)
 // PUT api/users/pantries/:id (Private)
 router.put('/pantries/:id', addPantry)
 
