@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 8000;
 
 // API
 const users = require('./api/users');
+const ingredients = require('./api/ingredients')
 
 // Middleware
 app.use(cors());
@@ -25,11 +26,12 @@ app.get('/', (req, res) => {
 
 // Routes
 app.use('/api/users', users);
+app.use('/api/ingredients', ingredients)
 
 app.get('/*', (req, res) => {
     res.status(404).json({ message: 'Data not found' });
 });
 
 app.listen(PORT, () => {
-    console.log(`Server is listening 🎧 on port: ${PORT}`);
+    console.log(`Server is listening on port: ${PORT}`);
 });
