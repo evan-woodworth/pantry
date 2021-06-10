@@ -8,7 +8,7 @@ const passport = require('passport');
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Models
-const { User, Recipe, Pantry } = require('../models')
+const { User, Recipe, Pantry, Ingredient } = require('../models')
 
 // controllers
 const test = async (req, res) => {
@@ -187,8 +187,9 @@ const fetchShoppingLists = async (req,res) => {
 }
 
 const addRecipe = async (req,res) => {
-    const { mealId } = req.params;
     console.log( "Inside of put users/recipes route" );
+    const { name, mealId, category, area, thumbnail, tags, 
+        instructions, ingredients, public, youtubeUrl } = req.body;
 
     try {
         // retrieve user
@@ -197,6 +198,24 @@ const addRecipe = async (req,res) => {
         // retrieve recipe by id
         let recipe = await Recipe.findOne({ mealId });
 
+        // if no recipe, create recipe
+        if (!recipe) {
+            console.log('creating recipe')
+            recipe = new Recipe({
+                name, mealId, category, area, thumbnail, tags,
+                instructions, public, youtubeUrl
+            })
+            recipe.author = user;
+            ingredients.forEach(async ing => {
+                let addIng = Ingredient.findOne({name:ing.name});
+                recipe.ingredients.push({
+                    addIng,
+                    measurement: ing.measurement
+                })
+            })
+            const savedRecipe = recipe.save();
+            res.json(savedRecipe)
+        }
         // add recipe to user
         user.recipes.push(recipe);
 
@@ -254,7 +273,7 @@ router.post('/login', login);
 
 // put
 // PUT api/users/recipes/:id (Private)
-router.put('/recipes/:mealId', addRecipe)
+router.put('/recipes', addRecipe)
 // PUT api/users/pantries/:id (Private)
 router.put('/pantries/:id', addPantry)
 

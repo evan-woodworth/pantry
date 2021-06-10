@@ -89,8 +89,14 @@ const createShoppingList = async (req,res) => {
         const pantry = await Pantry.findById(pantryId);
         const user = await User.findById(req.user.id);
         const newShoppingList = pantry.shoppingLists.create({
-            name,
-            ingredients
+            name
+        })
+        ingredients.forEach(async ing => {
+            let addIng = Ingredient.findOne({name:ing.name});
+            newShoppingList.ingredients.push({
+                addIng,
+                note
+            })
         })
         newShoppingList.owner.push(user);
         const savedNewShoppingList = await newShoppingList.save();
@@ -114,7 +120,6 @@ router.post('/create', passport.authenticate('jwt', { session: false }), createP
 router.post('/shoppinglist/new', passport.authenticate('jwt', { session: false }), createShoppingList)
 
 // put
-router.put('/addUser', passport.authenticate('jwt', { session: false }), createPantry)
 
 
 // export

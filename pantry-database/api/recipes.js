@@ -55,9 +55,14 @@ const fetchAll = async (req, res) => {
 }
 
 // routes
+// get
 router.get('/test', test)
 router.get('/id/:id', fetchOneById)
 router.get('/name/:name', fetchAllByName)
 router.get('/', fetchAll)
+
+// post
+
+// put
 
 module.exports = router; 
