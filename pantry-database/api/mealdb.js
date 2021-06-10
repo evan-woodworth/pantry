@@ -28,6 +28,7 @@ const getURL = (searchType, searchParam = '') => {
 const externalData = async (req,res) => {
     console.log('--- Inside of mealdb route ---')
     const { searchType, searchParam } = req.params;
+    // if (!searchParam) searchParam = '';
     theURL = getURL( searchType, searchParam );
     try {
         const results = await axios.get(theURL);
@@ -40,5 +41,6 @@ const externalData = async (req,res) => {
 }
 
 router.get('/:searchType/:searchParam', externalData);
+router.get('/:searchType', externalData);
 
 module.exports = router; 
