@@ -32,29 +32,39 @@ function CookNow(props) {
   console.log('===================')
   //let id = userID.id
   console.log('userID.id ' + userID.id);
-  const payload = {notUser: props.user}
+  //const payload = {notUser: props.user}
   // axios.get(`${REACT_APP_SERVER_URL}/api/users/recipes`)
   //    .then(response => {
   //     userRecipes = response.data 
   //     console.log(response.data)
   //    })
-  // axios.get(`${REACT_APP_SERVER_URL}/api/users/pantries`)
-  //   .then(response => {
-  //   userPantries = response.data
-  //   console.log(response.data)
-  //   })   
+  axios.get(`${REACT_APP_SERVER_URL}/api/users/pantries`)
+    .then(response => {
+    userPantries = response.data
+    console.log(response.data)
+    })   
   // axios.get(`${REACT_APP_SERVER_URL}/api/users/shoppingLists`)
   //   .then(response => {
   //   userShoppingLists = response.data
   //   console.log(response.data)
   //   })  
-  // const somethingElse = {id: }
-
-  // axios.get(`${REACT_APP_SERVER_URL}/api/pantries/ingredients`)
-  // .then(response => {
-  //   userPantries = response.data
-  //   console.log(response.data)
-  //   })   
+  let userIngs = []
+   axios.get(`${REACT_APP_SERVER_URL}/api/pantries/ingredients`)
+   .then(response => {
+    userIngs = response.data
+    console.log(response.data)
+    })   
+  // userPantries.forEach(pantPant => {
+  //   const payload = {
+  //     id: pantPant.id
+  //   }
+  //     axios.post(`${REACT_APP_SERVER_URL}/api/pantries/ingredients`, payload)
+  //     .then(response => {
+  //       userIng = response.data
+  //       console.log(response.data)
+  //       })  
+  // })
+ 
   
 
   return (
