@@ -113,8 +113,9 @@ const profile = async (req,res) => {
 
 const recipes = async (req,res) => {
     console.log("Inside of users/recipes route");
-
-    // retrieve user details
+    console.log(req.user)
+    console.log(req.notUser)
+    //retrieve user details
     let user = await User.findById(req.user.id);
 
     // retrieve recipes associated with user
