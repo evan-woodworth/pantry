@@ -29,7 +29,7 @@ function CookNow(props) {
   let id = userID.id
   console.log('userID.id ' + userID.id);
   const payload = {notUser: props.user}
-  axios.get(`${REACT_APP_SERVER_URL}/api/users/recipes`, payload)
+  axios.get(`${REACT_APP_SERVER_URL}/api/users/recipes`)
      .then(response => {
       userRecipes = response.data 
       console.log(response.data)
