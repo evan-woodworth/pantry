@@ -115,7 +115,7 @@ const recipes = async (req,res) => {
     console.log("Inside of users/recipes route");
 
     // retrieve user details
-    let user = await User.findById(req.user.id);
+    let user = await User.findById(req.body.user.id);
 
     // retrieve recipes associated with user
     let recipeList = [];
@@ -150,15 +150,15 @@ const fetchAuthorizedPantries = async (user) => {
 
 const pantries = async (req,res) => {
     console.log("Inside of users/pantries route");
+    console.log(req.body)
+    // // retrieve user details
+    // let user = await User.findById(req.user.id);
 
-    // retrieve user details
-    let user = await User.findById(req.user.id);
+    // // retrieve authorized pantries
+    // let authorizedPantries = await fetchAuthorizedPantries(user);
 
-    // retrieve authorized pantries
-    let authorizedPantries = await fetchAuthorizedPantries(user);
-
-    // display pantries
-    res.json(authorizedPantries);
+    // // display pantries
+    // res.json(authorizedPantries);
 }
 const fetchShoppingLists = async (req,res) => {
     console.log("Inside of users/shoppingLists route");
@@ -232,7 +232,7 @@ const addRecipe = async (req,res) => {
 const addPantry = async (req,res) => {
     const { id } = req.params;
     console.log( "Inside of put users/pantries route" );
-
+    
     try {
         // retrieve user
         let user = await User.findById(req.user.id);

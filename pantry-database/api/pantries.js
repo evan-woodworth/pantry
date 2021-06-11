@@ -73,6 +73,8 @@ const createPantry = async (req,res) => {
             admin: true
         })
         const savedNewPantry = await newPantry.save();
+        user.pantries.push(savedNewPantry);
+        const savedUser = user.save();
         res.json(savedNewPantry);
     } catch (error) {
         console.log('Error inside of /api/pantries/create');
@@ -88,7 +90,7 @@ const createShoppingList = async (req,res) => {
     try {
         const pantry = await Pantry.findById(pantryId);
         const user = await User.findById(req.user.id);
-        const newShoppingList = pantry.shoppingLists.create({
+        const newShoppingList = pantry.shoppingLists.push({
             name
         })
         ingredients.forEach(async ing => {
@@ -98,8 +100,7 @@ const createShoppingList = async (req,res) => {
                 note
             })
         })
-        newShoppingList.owner.push(user);
-        const savedNewShoppingList = await newShoppingList.save();
+        const savedPantry = await pantry.save();
         res.json(savedNewShoppingList);
     } catch (error) {
         console.log('Error inside of /api/pantries/shoppinglist/new');
