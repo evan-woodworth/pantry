@@ -30,15 +30,75 @@ const RecipeInfo = (props) => {
   };
 
 
+
+
+  let ingredients = [];
+
+  for (let i = 0; i < 20; i++) {
+    let arrayIngredient = recipes[`strIngredient${i}`]
+    let arrayMeasurement = recipes[`strMeasure${i}`]
+    if (arrayIngredient) {
+      ingredients.push({
+        name: arrayIngredient,
+        measurement: arrayMeasurement
+      })
+    }
+
+
+  }
+
+  const ingredientsList = ingredients.map(index => <li>{index.recipes}</li>)
+
+
+
+
+
+
+
   return (
 
 
     <div>
-      <h1>Recipe</h1>
-      <h1>{recipes.strMeal}</h1>
-      <h5>Instructions:</h5>
-      <p>{recipes.strInstructions}</p>
-      <h5>Ingredients:</h5>
+      <form>
+        <button onClick={props.history.goBack}>GO Back</button>
+        <hr />
+
+
+        <label for="favorites">Add to Favorites :</label>
+
+        <select name="favorites" id="favorites">
+          <option value="yesFavorite">Add to Favorites</option>
+          <option value="noFavorites">just checking</option>
+        </select>
+        <input type="submit" value="Add to Fovorites" />
+
+
+        <hr />
+        <h1>Recipe</h1>
+        <h1>{recipes.strMeal}</h1>
+        <h5>Instructions:</h5>
+        <p>{recipes.strInstructions}</p>
+        <h5>Ingredients:</h5>
+        <ul>
+          {ingredientsList}
+
+        </ul>
+        <h5>Tags: {recipes.strTags}</h5>
+        <a href="{recipes[0].strYoutube}" target="_blank">Youtube</a>
+        <br />
+
+
+
+      </form>
+
+
+
+
+
+
+      {/* 
+
+
       <ul>
         <li>{recipes.strIngredient1}</li>
         <li>{recipes.strIngredient2}</li>
@@ -49,14 +109,14 @@ const RecipeInfo = (props) => {
         <li>{recipes.strIngredient7}</li>
         <li>{recipes.strIngredient8}</li>
         <li>{recipes.strIngredient9}</li>
-      </ul>
-       <a href="{recipes[0].strYoutube}" target="_blank">Youtube</a>
-       <br />
-      <button onClick={props.history.goBack}>GO Back</button>
+      </ul> */}
+
+
+
 
     </div>
 
-   
+
   )
 }
 export default RecipeInfo
