@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+
 // import userEvent from '@testing-library/user-event';
 
 
 const RecipeInfo = (props) => {
+
+
 
   const [recipes, setRecipes] = useState([])
 
@@ -46,10 +49,29 @@ const RecipeInfo = (props) => {
 
 
   }
+  //  function for ingredients and measurement
+  const ingredientsList = ingredients.map(index => (
+    <li>{index.name}, {index.measurement}</li>
+  ))
 
-  const ingredientsList = ingredients.map(index => <li>{index.recipes}</li>)
+
+  //   const newTag = recipes.strTags.slice()
+  //   recipes.strTags
+  // }
 
 
+
+
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let strMeal = e.target.strMeal.value
+    let strInstructions = e.target.strInstructions.value
+    let strTags = e.target.strTags;
+    // reset();
+
+  }
 
 
 
@@ -59,11 +81,15 @@ const RecipeInfo = (props) => {
 
 
     <div>
-      <form>
-        <button onClick={props.history.goBack}>GO Back</button>
-        <hr />
+      <form onSubmit={handleSubmit}>
+        <input type="hidden" name="name" value={recipes.strMeal} />
+        <input type="hidden" name="instructions" value={recipes.strInstructions} />
+        <input type="hidden" name="mealId" value={recipes.idMeal} />
+        <input type="hidden" name="ingredients" value={ingredients} />
+        <input type="hidden" name="public" value="true" />
 
 
+        {/* //// display the label and inputs elements */}
         <label for="favorites">Add to Favorites :</label>
 
         <select name="favorites" id="favorites">
@@ -72,49 +98,30 @@ const RecipeInfo = (props) => {
         </select>
         <input type="submit" value="Add to Fovorites" />
 
-
         <hr />
-        <h1>Recipe</h1>
-        <h1>{recipes.strMeal}</h1>
-        <h5>Instructions:</h5>
-        <p>{recipes.strInstructions}</p>
+
+        <h2 id="strMeal" >{recipes.strMeal}</h2>
+        <label id="strInstructions"  >{recipes.strInstructions}</label>
         <h5>Ingredients:</h5>
-        <ul>
+        <ul >
+
           {ingredientsList}
 
         </ul>
-        <h5>Tags: {recipes.strTags}</h5>
-        <a href="{recipes[0].strYoutube}" target="_blank">Youtube</a>
+        <h5 id="strTags" >{recipes.strTags}</h5>
+        <br />
+        <img src={recipes.strMealThumb} />
+        <br />
+        <a href="{recipes.strYoutube}" target="_blank">Youtube</a>
         <br />
 
 
 
+
+
       </form>
-
-
-
-
-
-
-      {/* 
-
-
-      <ul>
-        <li>{recipes.strIngredient1}</li>
-        <li>{recipes.strIngredient2}</li>
-        <li>{recipes.strIngredient3}</li>
-        <li>{recipes.strIngredient4}</li>
-        <li>{recipes.strIngredient5}</li>
-        <li>{recipes.strIngredient6}</li>
-        <li>{recipes.strIngredient7}</li>
-        <li>{recipes.strIngredient8}</li>
-        <li>{recipes.strIngredient9}</li>
-      </ul> */}
-
-
-
-
-    </div>
+      <button onClick={props.history.goBack}>Return </button>
+    </div >
 
 
   )
