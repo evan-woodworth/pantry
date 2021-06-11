@@ -6,10 +6,8 @@ const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 
 const SearchBar = (props) => {
-  // console.log(props);
   const [search, setSearch] = useState("");
   const [result, setResult] = useState([]);
-  // const [redirect, setRedirect] = useState(false);
 
   const handleInput = (e) => {
     setSearch(e.target.value);
@@ -32,8 +30,6 @@ const SearchBar = (props) => {
     // })
   };
 
-  // if (redirect) return <Redirect to='/search'/>
-
   return (
     <div>
       <form onSubmit={submitForm}>
@@ -41,7 +37,6 @@ const SearchBar = (props) => {
         <input type="text" name="search" value={search.value} onChange={handleInput}/>
         <button type="submit" className="btn btn-secondary"> Search </button>
       </form>
-      {/* <Route to="/search" render={(...props) => <Search {...props} result={result}/>} /> */}
     </div>
   );
 };

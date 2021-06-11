@@ -6,12 +6,6 @@ const Search = (props) => {
   const data = props.history.location.state
   console.log('SEARCH PAGE DATA >>>> ', data);
 
-  const [result, setResult] = useState('');
-  
-  useEffect(() => {
-    setResult(data);
-  }, [data]);
-
   const searchList = data.map((item, index) => {
     return <ul key={index}>{item.strMeal}</ul>
   })
