@@ -1,3 +1,56 @@
+import React, { Component, Redirect } from 'react';
+import axios from 'axios';
+import { withRouter } from "react-router";
+
+class Search extends Component {
+  state = {
+    query: '',
+    results: []
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+  const { history } = this.props;
+    if (prevState.results !== this.state.results) {
+      history.push('/results');
+    }
+  }
+
+  getInfo = () => {
+    axios.get(`https://api.themoviedb.org/3/search/tv?api_key=6d9a91a4158b0a021d546ccd83d3f52e&language=en-US&query=${this.state.query}&page=1`)
+    .then(({ data }) => {
+      this.setState({
+        results: data
+      });
+    });
+  };
+
+  handleInputChange = e => {
+    e.preventDefault();
+    this.setState({query: this.search.value}, () => {
+        if (this.state.query && this.state.query.length > 1) {
+          if (this.state.query.length % 2 === 0) {
+            this.getInfo();
+          }
+        } else if (!this.state.query) {
+        }
+      }
+    );
+  };
+
+  render() {
+    return (
+      <div>
+        <form>
+          <input className='search' placeholder='⌕' type='text' ref={input => (this.search = input)} onChange={this.handleInputChange}/>
+        </form>
+      </div>
+    );
+  }
+}
+
+export default withRouter(Search);
+
+
 // ========================================
 // SEARCHBAR WORKING EXAMPLE
 // ========================================
@@ -112,3 +165,55 @@ const SearchBar = () => {
 };
 
 export default SearchBar;
+
+
+// =====================================
+// CURRENT SEARCHBAR CODE
+// =====================================
+import axios from "axios";
+import React, { useState } from "react";
+import {Route, withRouter, Redirect} from "react-router-dom";
+import Search from "../pages/Search";
+const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL;
+
+
+const SearchBar = (props) => {
+  console.log(props);
+  const [search, setSearch] = useState("");
+  const [result, setResult] = useState([]);
+  // const [redirect, setRedirect] = useState(false);
+
+  const handleInput = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const submitForm = (e) => {
+    e.preventDefault();
+    console.log(search);
+    axios.get(`${REACT_APP_SERVER_URL}/api/mealdb/filterIngredient/${search}`)
+    .then(response => {
+      console.log(response.data.meals);
+      setResult(response.data.meals);
+      props.history.push('/search');
+      // setRedirect(true);
+    }).catch(error => {
+      console.log('------------ SEARCH ERROR ------------')
+      console.log(error);
+    })
+  };
+
+  // if (redirect) return <Redirect to='/search'/>
+
+  return (
+    <div>
+      <form onSubmit={submitForm}>
+        <label htmlFor="search" />
+        <input type="text" name="search" value={search.value} onChange={handleInput}/>
+        <button type="submit" className="btn btn-secondary"> Search </button>
+      </form>
+      {/* <Route to="/search" render={(...props) => <Search {...props} result={result}/>} /> */}
+    </div>
+  );
+};
+
+export default withRouter(SearchBar);

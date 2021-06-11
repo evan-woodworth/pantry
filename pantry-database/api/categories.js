@@ -12,6 +12,7 @@ const { Category } = require('../models')
 const test = async (req, res) => {
     res.json({ message: 'Categories endpoint OK!'});
 }
+
 // fetch one by Id
 const fetchOneById = async (req, res) => {
     const { id } = req.params;
@@ -26,6 +27,7 @@ const fetchOneById = async (req, res) => {
         return res.status(400).json({message:'Category not found, please try again.'})
     }
 }
+
 // fetch all by name
 const fetchAllByName = async (req, res) => {
     const { name } = req.params;
@@ -40,6 +42,7 @@ const fetchAllByName = async (req, res) => {
         return res.status(400).json({message:'Categories not found, please try again.'})
     }
 }
+
 // fetch all categories
 const fetchAll = async (req, res) => {
     console.log('--- Inside of Categories fetchAll ---');

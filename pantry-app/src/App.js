@@ -79,6 +79,8 @@ function App() {
             <Route exact path='/' component={Welcome} />
             <PrivateRoute path='/profile' component={Profile} user={currentUser} handleLogout={handleLogout} />
 
+            <Route path='/search' component={Search} user={currentUser} />
+
             <PrivateRoute
               path='/pantry'
               component={Pantry}
@@ -96,8 +98,6 @@ function App() {
               component={CookNow}
               user={currentUser}
             />
-
-            <Route path='/?search' component={Search} user={currentUser} />
 
             <Route
               path='/shoppinglist'

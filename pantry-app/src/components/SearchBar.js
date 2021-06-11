@@ -1,12 +1,15 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Redirect, Route } from "react-router-dom";
+import {Route, withRouter, Redirect} from "react-router-dom";
 import Search from "../pages/Search";
 const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
-const SearchBar = () => {
+
+const SearchBar = (props) => {
+  // console.log(props);
   const [search, setSearch] = useState("");
   const [result, setResult] = useState([]);
+  // const [redirect, setRedirect] = useState(false);
 
   const handleInput = (e) => {
     setSearch(e.target.value);
@@ -19,22 +22,28 @@ const SearchBar = () => {
     .then(response => {
       console.log(response.data.meals);
       setResult(response.data.meals);
-      return (
-        <Redirect to='/search' render={(props) => <Search {...props} result={result}/>} />
-      )
-    }).catch(error => {
-      console.log('------------ SEARCH ERROR ------------')
-      console.log(error);
-    })
+    }).then(response => {
+        props.history.push('/search', result);
+    });
+      // setRedirect(true);
+    // }).catch(error => {
+    //   console.log('------------ SEARCH ERROR ------------')
+    //   console.log(error);
+    // })
   };
 
+  // if (redirect) return <Redirect to='/search'/>
+
   return (
+    <div>
       <form onSubmit={submitForm}>
         <label htmlFor="search" />
         <input type="text" name="search" value={search.value} onChange={handleInput}/>
         <button type="submit" className="btn btn-secondary"> Search </button>
       </form>
+      {/* <Route to="/search" render={(...props) => <Search {...props} result={result}/>} /> */}
+    </div>
   );
 };
 
-export default SearchBar;
+export default withRouter(SearchBar);
