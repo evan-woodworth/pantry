@@ -13,6 +13,7 @@ const test = async (req, res) => {
     res.json({ message: 'Recipe endpoint OK!'});
 }
 
+
 // fetch one by Id
 const fetchOneById = async (req, res) => {
     const { id } = req.params;
@@ -28,6 +29,7 @@ const fetchOneById = async (req, res) => {
     }
 }
 
+
 // fetch all by name
 const fetchAllByName = async (req, res) => {
     const { name } = req.params;
@@ -42,6 +44,7 @@ const fetchAllByName = async (req, res) => {
         return res.status(400).json({message:'Recipes not found, please try again.'})
     }
 }
+
 
 // fetch all recipes
 const fetchAll = async (req, res) => {
