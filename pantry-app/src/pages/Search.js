@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 
 
 const Search = (props) => {
@@ -13,7 +13,7 @@ const Search = (props) => {
   return (
     <div>
       <p>Search Results Page</p>
-      {searchList}
+      {data.length ? searchList : <p>...Loading</p>}
     </div>
   );
 };
