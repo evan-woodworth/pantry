@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+
 export default function Meal({ image, name, id, info }) {
   return (
     <article className='meal'>
