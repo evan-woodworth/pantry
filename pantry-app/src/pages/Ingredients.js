@@ -1,34 +1,45 @@
-import React from 'react'
-import { ingredientData } from '../ingredientData'
-const UseStateArray = () => {
-  const [ingredient, setIngredient] = React.useState(ingredientData)
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
-  const removeItem = (idIngredient) => {
-    let newIngredient = ingredient.filter(
-      (meal) => meal.idIngredient !== idIngredient
-    )
-    setIngredient(newIngredient)
-  }
+
+const Ingredient = (props) => {
+  const { name } = props.ingredient
+
   return (
-    <>
-      <div className='item'>
-        <article className='overflowTest'>
-          {ingredient.map((meal) => {
-            const { idIngredient, strIngredient } = meal
-            return (
-              <div key={idIngredient} className='item'>
-                <p>{strIngredient}</p>
-                <button onClick={() => removeItem(idIngredient)}>remove</button>
-              </div>
-            )
-          })}
-          <button className='btn' onClick={() => setIngredient([])}>
-            clear items
-          </button>
-        </article>
-      </div>
-    </>
+    <div>
+      <ul>
+        <li>Name: {name}</li>
+      </ul>
+    </div>
   )
 }
 
-export default UseStateArray
+const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL
+
+const IngredientContainer = () => {
+  const [ingredient, setIngredient] = useState([])
+  const fetchIngredients = async () => {
+    const response = await axios.get(`${REACT_APP_SERVER_URL}/api/ingredients`)
+    const data = response.data.theIngredients // array
+    console.log('-----------HERE-------------')
+    console.log(data)
+    setIngredient(data)
+  }
+  useEffect(() => {
+    console.log('----HERE-------HERE--------HERE-----')
+    fetchIngredients()
+  }, [])
+
+  console.log(ingredient)
+  console.log('-----------HERE---HERE-------------')
+
+  const ingredientList = ingredient.map((ingredient, index) => {
+    return <li key={index}>{ingredient.name}</li>
+  })
+
+  return <ul>{ingredient ? ingredientList : <p>loading...</p>}</ul>
+}
+
+export default IngredientContainer
+
+
