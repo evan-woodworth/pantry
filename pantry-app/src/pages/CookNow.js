@@ -22,27 +22,44 @@ const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 function CookNow(props) {
   let userRecipes = []
   let userPantries = []
+  let userShoppingLists = []
   console.log('****************************')
   console.log(props)
   let userID = props.user
   console.log(userID);
-  let id = userID.id
+  console.log('===================')
+  
+  console.log('===================')
+  //let id = userID.id
   console.log('userID.id ' + userID.id);
   const payload = {notUser: props.user}
-  axios.get(`${REACT_APP_SERVER_URL}/api/users/recipes`)
-     .then(response => {
-      userRecipes = response.data 
-      console.log(response.data)
-     })
-  axios.get(`${REACT_APP_SERVER_URL}/api/users/pantries`, payload)
-    .then(response => {
-    userPantries = response.data
-    console.log(response.data)
-    })   
+  // axios.get(`${REACT_APP_SERVER_URL}/api/users/recipes`)
+  //    .then(response => {
+  //     userRecipes = response.data 
+  //     console.log(response.data)
+  //    })
+  // axios.get(`${REACT_APP_SERVER_URL}/api/users/pantries`)
+  //   .then(response => {
+  //   userPantries = response.data
+  //   console.log(response.data)
+  //   })   
+  // axios.get(`${REACT_APP_SERVER_URL}/api/users/shoppingLists`)
+  //   .then(response => {
+  //   userShoppingLists = response.data
+  //   console.log(response.data)
+  //   })  
+  // const somethingElse = {id: }
+
+  // axios.get(`${REACT_APP_SERVER_URL}/api/pantries/ingredients`)
+  // .then(response => {
+  //   userPantries = response.data
+  //   console.log(response.data)
+  //   })   
+  
+
   return (
     <h1>Cook Now</h1>
-  )
-
+    )
 };
 
 
