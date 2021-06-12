@@ -24,7 +24,7 @@ const Search = (props) => {
     <section>
       <h2 className='section-title'>Search Result</h2>
       <div className='meals-center'>
-        {data.length ? (searchList) : (<p> ...Loading... </p>)}
+        {data.length ? (searchList) : (<p className="text-center"> ...Loading... </p>)}
       </div>
     </section>
   );
