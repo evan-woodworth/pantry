@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import {Redirect, withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 
@@ -14,15 +14,14 @@ const SearchBar = (props) => {
     setSearchType(e.target.name);
   };
 
-  
   useEffect(() => {
-    if (props.location.state == false) {
-      return <Redirect to='/' />
+    if (props.history.location.state === false) {
+      console.log('Nothing!');
+      alert('No search match.');
     } else if (result) {
       props.history.push('/search', result);
     }
   }, [props.history, result]);
-
 
   const submitForm = (e) => {
     e.preventDefault();
