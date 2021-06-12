@@ -22,7 +22,7 @@ import CookNow from './pages/CookNow'
 
 import Search from './pages/Search'
 import ShoppingList from './pages/ShoppingList'
-import RecipeInfo from './pages/RecipeInfo'
+import Recipe from './pages/Recipe'
 import AddRecipe from './pages/AddRecipe'
 
 
@@ -73,47 +73,18 @@ function App() {
         <Navbar isAuth={isAuthenticated} handleLogout={handleLogout} />
         <div className='container mt-5'>
           <Switch>
+            <Route exact path='/' component={Welcome} />
             <Route path='/signup' component={Signup} />
             <Route path='/login' render={(props) => (<Login {...props} user={currentUser} nowCurrentUser={nowCurrentUser} setIsAuthenticated={setIsAuthenticated}/>)} />
             <Route path='/about' component={About} />
-            <Route exact path='/' component={Welcome} />
-            <PrivateRoute path='/profile' component={Profile} user={currentUser} handleLogout={handleLogout} />
-
             <Route path='/search' component={Search} user={currentUser} />
-
-            <PrivateRoute
-              path='/pantry'
-              component={Pantry}
-              user={currentUser}
-            />
-
-            <PrivateRoute
-              path='/myrecipes'
-              component={MyRecipes}
-              user={currentUser}
-            />
-
-            <PrivateRoute
-              path='/cooknow'
-              component={CookNow}
-              user={currentUser}
-            />
-
-            <Route
-              path='/shoppinglist'
-              component={ShoppingList}
-              user={currentUser}
-            />
-            <Route
-              path='/recipeinfo'
-              component={RecipeInfo}
-              user={currentUser}
-            />
-            <PrivateRoute
-              path='/addrecipe'
-              component={AddRecipe}
-              user={currentUser}
-            />
+            <Route path='/recipe' component={Recipe} user={currentUser} />
+            <Route path='/shoppinglist' component={ShoppingList} user={currentUser} />
+            <PrivateRoute path='/profile' component={Profile} user={currentUser} handleLogout={handleLogout} />
+            <PrivateRoute path='/pantry' component={Pantry} user={currentUser} />
+            <PrivateRoute path='/myrecipes' component={MyRecipes} user={currentUser} />
+            <PrivateRoute path='/cooknow' component={CookNow} user={currentUser} />
+            <PrivateRoute path='/addrecipe' component={AddRecipe} user={currentUser} />
           </Switch>
         </div>
         <Footer />
