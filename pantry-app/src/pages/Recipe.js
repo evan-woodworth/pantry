@@ -1,10 +1,25 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
+const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 
 const Recipe = (props) => {
-  const recipe = props.location.state
-  console.log(recipe)
+  const data = props.location.state
+  const [recipe, setRecipe] = useState(data);
 
+  useEffect(() => {
+    let mealId = data.idMeal
+    axios.get(`${REACT_APP_SERVER_URL}/api/mealdb/id/${mealId}`)
+    .then(response => {
+      let meal = response.data.meals[0];
+      setRecipe(meal);
+      console.log(meal)
+    }).catch(error => {
+      console.log('------------ RECIPE ERROR ------------');
+      console.log(error)
+    });
+  }, []);
+  
   let video = '';
   if (recipe.strYoutube) {
     video = <a href={recipe.strYoutube}>Instructional Video</a>

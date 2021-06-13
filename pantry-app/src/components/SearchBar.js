@@ -28,8 +28,8 @@ const SearchBar = (props) => {
 
   const submitForm = (e) => {
     e.preventDefault();
-    console.log('User Input:', search)
-    console.log('Search Type:', searchType)
+    // console.log('User Input:', search)
+    // console.log('Search Type:', searchType)
     axios.get(`${REACT_APP_SERVER_URL}/api/mealdb/${searchType}/${search}`)
     .then(response => {
       setResult(response.data.meals);
