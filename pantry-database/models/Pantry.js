@@ -24,11 +24,11 @@ const pantrySchema = new Schema({
         ingredient: {type: mongoose.Schema.Types.ObjectId, ref: "Ingredient"},
         note: String
     }],
-    users: {
+    users: [{
         user: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
         access: Boolean,
         admin: Boolean
-    },
+    }],
     shoppingLists: [shoppingListSchema],
     nonAdminRights: String
 })

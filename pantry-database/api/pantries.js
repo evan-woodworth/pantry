@@ -73,6 +73,8 @@ const createPantry = async (req,res) => {
             admin: true
         })
         const savedNewPantry = await newPantry.save();
+        user.pantries.push(savedNewPantry);
+        const savedUser = user.save();
         res.json(savedNewPantry);
     } catch (error) {
         console.log('Error inside of /api/pantries/create');
@@ -88,7 +90,7 @@ const createShoppingList = async (req,res) => {
     try {
         const pantry = await Pantry.findById(pantryId);
         const user = await User.findById(req.user.id);
-        const newShoppingList = pantry.shoppingLists.create({
+        const newShoppingList = pantry.shoppingLists.push({
             name
         })
         ingredients.forEach(async ing => {
@@ -98,8 +100,7 @@ const createShoppingList = async (req,res) => {
                 note
             })
         })
-        newShoppingList.owner.push(user);
-        const savedNewShoppingList = await newShoppingList.save();
+        const savedPantry = await pantry.save();
         res.json(savedNewShoppingList);
     } catch (error) {
         console.log('Error inside of /api/pantries/shoppinglist/new');
@@ -107,12 +108,29 @@ const createShoppingList = async (req,res) => {
         return res.status(400).json({message: 'Error occurred, please try again...'})
     }
 }
+// fetch all ingredients from pantry
+const fetchIngredients = async (req, res) => {
+    const { id } = req.body;
+    console.log('--- Inside of Pantry fetchIngredients ---');
+    console.log(`Searching for ingredients from pantry`);
+    try {
+        let thePantry = await Pantry.findById(id);
+        let theIngredients = thePantry.ingredients;
+        res.json({ theIngredients });
+    } catch (error) {
+        console.log("Error inside of /pantries/ingredients");
+        console.log(error);
+        return res.status(400).json({message:'Ingredients not found, please try again.'})
+    }
+}
+
 
 // routes
 // get
 router.get('/test', passport.authenticate('jwt', { session: false }), test)
 router.get('/id/:id', passport.authenticate('jwt', { session: false }), fetchOneById)
 router.get('/name/:name', passport.authenticate('jwt', { session: false }), fetchAllByName)
+router.get('/ingredients', passport.authenticate('jwt', { session: false }), fetchIngredients)
 router.get('/', passport.authenticate('jwt', { session: false }), fetchAll)
 
 // post

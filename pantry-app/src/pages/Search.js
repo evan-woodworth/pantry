@@ -1,18 +1,21 @@
-import React from 'react'
+import React from "react";
 
-// Display search results
 
-const Search = () => {
+const Search = (props) => {
+  console.log('Search Page Props: ', props)
+  const data = props.history.location.state
+  console.log('SEARCH PAGE DATA >>>> ', data);
+
+  const searchList = data.map((item, index) => {
+    return <ul key={index}>{item.strMeal}</ul>
+  })
+
   return (
     <div>
-      <h1>Search the api for Recipes</h1>
-      <p>
-        Write a function that uses the recipe api to display a list of recipe results.
-      </p>
-      <li>User should be able to view recipe ingredients</li>
-      <li>User should be able to add recipe to "MyRecipes.js"</li>
-      <li>User should be able to click back to Search page</li>
+      <p>Search Results Page</p>
+      {data.length ? searchList : <p>...Loading</p>}
     </div>
-  )
-}
-export default Search
+  );
+};
+
+export default Search;
