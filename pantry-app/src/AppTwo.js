@@ -4,15 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import SingleMeal from './pages/RecipeApi/SingleMeal'
 
 function App() {
-  return (
-    <Router>
-      <Switch>
-        <Route path='/meal/:id'>
-          <SingleMeal />
-        </Route>
-      </Switch>
-    </Router>
-  )
+  return <SingleMeal />
 }
 
 export default App

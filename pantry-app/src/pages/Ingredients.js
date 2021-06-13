@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-
 const Ingredient = (props) => {
-  const { name } = props.ingredient
+  const { name, type } = props.ingredient
 
   return (
     <div>
       <ul>
-        <li>Name: {name}</li>
+        <li>Name: {(name, type)}</li>
       </ul>
     </div>
   )
@@ -21,25 +20,29 @@ const IngredientContainer = () => {
   const fetchIngredients = async () => {
     const response = await axios.get(`${REACT_APP_SERVER_URL}/api/ingredients`)
     const data = response.data.theIngredients // array
-    console.log('-----------HERE-------------')
-    console.log(data)
+    // console.log('--HERE--')
+    // console.log(data)
     setIngredient(data)
   }
   useEffect(() => {
-    console.log('----HERE-------HERE--------HERE-----')
+    // console.log('---HERE---HERE---')
     fetchIngredients()
   }, [])
 
   console.log(ingredient)
-  console.log('-----------HERE---HERE-------------')
+  // console.log('---HERE---HERE---HERE---')
 
   const ingredientList = ingredient.map((ingredient, index) => {
     return <li key={index}>{ingredient.name}</li>
   })
 
-  return <ul>{ingredient ? ingredientList : <p>loading...</p>}</ul>
+  return (
+    <div className='item'>
+      <article className='overflowTest'>
+        <ul>{ingredient ? ingredientList : <p>loading...</p>}</ul>
+      </article>
+    </div>
+  )
 }
 
 export default IngredientContainer
-
-

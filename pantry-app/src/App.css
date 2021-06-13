@@ -337,7 +337,7 @@ p {
 }
 
 .overflowTest {
-  color:white;
+  color: var(--clr-grey-5);
   padding: 1px;
   width: 100%;
   height: 300px;
