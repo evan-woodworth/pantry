@@ -1,26 +1,33 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 
 const SearchBar = (props) => {
-  const [search, setSearch] = useState("");
-  const [result, setResult] = useState([]);
+  const [search, setSearch] = useState('');
+  const [searchType, setSearchType] = useState('');
+  const [result, setResult] = useState(null);
 
   const handleInput = (e) => {
     setSearch(e.target.value);
+    setSearchType(e.target.name);
   };
 
   useEffect(() => {
-    console.log(result)
-    props.history.push('/search', result);
-  }, [result]);
+    if (props.history.location.state === false) {
+      console.log('Nothing!');
+      alert('No search match.');
+    } else if (result) {
+      props.history.push('/search', result);
+    }
+  }, [props.history, result]);
 
   const submitForm = (e) => {
     e.preventDefault();
-    console.log(search);
-    axios.get(`${REACT_APP_SERVER_URL}/api/mealdb/filterIngredient/${search}`)
+    console.log('User Input:', search)
+    console.log('Search Type:', searchType)
+    axios.get(`${REACT_APP_SERVER_URL}/api/mealdb/${searchType}/${search}`)
     .then(response => {
       setResult(response.data.meals);
     }).catch(error => {
@@ -32,8 +39,14 @@ const SearchBar = (props) => {
   return (
     <div>
       <form onSubmit={submitForm}>
-        <label htmlFor="search" />
-        <input type="text" name="search" value={search.value} onChange={handleInput}/>
+        <input type="text" name="name" value={search.value} onChange={handleInput}/>
+        <select>
+          <option name="firstLetter">All</option>
+          <option name="name">Recipe</option>
+          <option name="filterIngredient">Ingredient</option>
+          <option name="filterCategory">Categories</option>
+          <option name="filterArea">Area</option>
+        </select>
         <button type="submit" className="btn btn-secondary"> Search </button>
       </form>
     </div>

@@ -15,7 +15,7 @@ const Navbar = (props) => {
           <ul className="navbar-nav mr-auto">
             <li className="nav-item">{" "}<NavLink className="nav-link" exact to="/"> {" "}Home{" "} </NavLink></li>
             <li className="nav-item">{" "}<NavLink className="nav-link" to="/about"> {" "}About{" "} </NavLink></li>
-            <li className="nav-item">{" "}<NavLink className="nav-link" to="/recipeinfo"> {" "}Recipe Info{" "} </NavLink></li>
+            {/* <li className="nav-item">{" "}<NavLink className="nav-link" to="/recipe"> {" "}Recipe{" "} </NavLink></li> */}
             <li className="nav-item">{" "}<NavLink className="nav-link" to="/shoppinglist"> {" "}Shopping List{" "} </NavLink></li>
             {/* <li className='nav-item'> <NavLink className='nav-link' to='/search'> Search </NavLink></li> */}
             <SearchBar />

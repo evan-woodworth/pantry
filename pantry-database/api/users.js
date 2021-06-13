@@ -115,7 +115,7 @@ const recipes = async (req,res) => {
     console.log("Inside of users/recipes route");
 
     // retrieve user details
-    let user = await User.findById(req.body.user.id);
+    let user = await User.findById(req.user.id);
 
     // retrieve recipes associated with user
     let recipeList = [];
@@ -128,62 +128,35 @@ const recipes = async (req,res) => {
     res.json(recipeList);
 }
 
-const fetchAuthorizedPantries = async (user) => {
-    // retrieve pantries associated with user
-    let pantryList = [];
-
-    user.pantries.forEach(async item=>{
-        let thePantry = await Pantry.findById(item.id);
-        pantryList.push(thePantry);
-    })
-
-    // sort for authorized pantries
-    let authorizedPantries = [];
-    pantryList.forEach(pantry=>{
-        pantry.users.forEach(pantryUser=>{
-            if ( pantryUser.user.id === user.id ) authorizedPantries.push(pantry);
-        })
-    })
-
-    return authorizedPantries;
-}
-
 const pantries = async (req,res) => {
     console.log("Inside of users/pantries route");
     console.log(req.body)
-    // // retrieve user details
-    // let user = await User.findById(req.user.id);
-
-    // // retrieve authorized pantries
-    // let authorizedPantries = await fetchAuthorizedPantries(user);
-
-    // // display pantries
-    // res.json(authorizedPantries);
+    User.findById(req.user.id).populate("pantries")
+    .exec((err, user)=>{
+        if (err) console.log("there was an error.");
+        pantryList = user.pantries;
+        console.log(pantryList)
+        res.json({pantryList});
+    })
 }
 const fetchShoppingLists = async (req,res) => {
     console.log("Inside of users/shoppingLists route");
 
-    // retrieve user details
-    let user = await User.findById(req.user.id);
-
-    // retrieve authorized pantries
-    let authorizedPantries = await fetchAuthorizedPantries(user);
-
-    // retrieve user's shopping lists from pantries
-    userLists = [];
-    authorizedPantries.forEach(pantry=>{
-        pantry.shoppingLists.forEach(list=>{
-            if ( user.id === list.owner.id ) {
-                userLists.push(list);
-            } else {
-                list.shoppers.forEach(shopper=>{
-                    if ( user.id === shopper.id ) userLists.push(list);
-                })
-            }
+    User.findById(req.user.id).populate("pantries")
+    .populate("shoppingLists")
+    .exec((err, user)=>{
+        if (err) console.log("there was an error.");
+        console.log(user)
+        const shoppingLists = [];
+        user.pantries.forEach(pantry =>{
+            pantry.shoppingLists.forEach(list => {
+                shoppingLists.push(list)
+            })
         })
+        res.json({shoppingLists});
     })
-    // display lists
-    res.json(userLists);
+
+    
 }
 
 const addRecipe = async (req,res) => {
