@@ -46,7 +46,7 @@ const SearchBar = (props) => {
           <option name="filterCategory">Categories</option>
           <option name="filterArea">Area</option>
         </select>
-        <input type="text" name="name" value={search.value} onChange={handleInput} className="search-input" placeholder="Enter a recipe..."/>
+        <input type="text" name="name" value={search.value} onChange={handleInput} className="search-input" placeholder="...Me Hungry..."/>
         <button type="submit" className="search-btn">
           {/* Magnifying Glass Icon */}
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
