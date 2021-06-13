@@ -39,7 +39,7 @@ const Recipe = (props) => {
     <section className='section meal-section'>
       <h2 className='section-title'>{recipe.strMeal}</h2>
       <div className='food'>
-        <img src={recipe.strMealThumb} />
+        <img src={recipe.strMealThumb} alt={recipe.strMeal}/>
         <div className='food-info'>
           <p><span className='food-data'> Name:</span>{recipe.strMeal}</p>
           <p><span className='food-data'> Category:</span>{recipe.strCategory}</p>

@@ -6,12 +6,15 @@ const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 const SearchBar = (props) => {
   const [search, setSearch] = useState('');
-  const [searchType, setSearchType] = useState('');
+  const [searchType, setSearchType] = useState('name');
   const [result, setResult] = useState(null);
 
   const handleInput = (e) => {
     setSearch(e.target.value);
-    setSearchType(e.target.name);
+  };
+
+  const handleSelection = (e) => {
+    setSearchType(e.target.value)
   };
 
   useEffect(() => {
@@ -39,14 +42,13 @@ const SearchBar = (props) => {
   return (
     <div className="search">
       <form onSubmit={submitForm}>
-        <select className="selector-btn">
-          <option name="firstLetter">All</option>
-          <option name="name">Recipe</option>
-          <option name="filterIngredient">Ingredient</option>
-          <option name="filterCategory">Categories</option>
-          <option name="filterArea">Area</option>
+        <select onChange={handleSelection} className="selector-btn">
+          <option value="name">Recipe</option>
+          <option value="filterIngredient">Main Ingredient</option>
+          <option value="filterCategory">Categories</option>
+          <option value="filterArea">Area</option>
         </select>
-        <input type="text" name="name" value={search.value} onChange={handleInput} className="search-input" placeholder="...Me Hungry..."/>
+        <input type="text" value={search.value} onChange={handleInput} className="search-input" placeholder="...Me Hungry..."/>
         <button type="submit" className="search-btn">
           {/* Magnifying Glass Icon */}
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
