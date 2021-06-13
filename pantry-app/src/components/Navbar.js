@@ -13,21 +13,18 @@ const Navbar = (props) => {
 
         <div className="collapse navbar-collapse" id="navbarsExample07">
           <ul className="navbar-nav mr-auto">
-            <li className="nav-item">{" "}<NavLink className="nav-link" exact to="/"> {" "}Home{" "} </NavLink></li>
             <li className="nav-item">{" "}<NavLink className="nav-link" to="/about"> {" "}About{" "} </NavLink></li>
-            <li className="nav-item">{" "}<NavLink className="nav-link" to="/recipeinfo"> {" "}Recipe Info{" "} </NavLink></li>
             <li className="nav-item">{" "}<NavLink className="nav-link" to="/shoppinglist"> {" "}Shopping List{" "} </NavLink></li>
-            {/* <li className='nav-item'> <NavLink className='nav-link' to='/search'> Search </NavLink></li> */}
-            <SearchBar />
           </ul>
+          <SearchBar />
 
           {props.isAuth ? (
             <ul className="navbar-nav ml-auto">
-              <li className="nav-item"><NavLink className="nav-link" to="/profile"> {" "}Profile{" "} </NavLink></li>
               <li className="nav-item"><NavLink className="nav-link" to="/pantry"> {" "}Pantry{" "} </NavLink></li>
               <li className="nav-item"><NavLink className="nav-link" to="/myrecipes"> {" "}My Recipes{" "} </NavLink></li>
               <li className="nav-item"><NavLink className="nav-link" to="/cooknow"> {" "}Cook Now{" "} </NavLink></li>
               <li className="nav-item"><NavLink className="nav-link" to="/addrecipe"> {" "}Add Recipe{" "} </NavLink></li>
+              <li className="nav-item"><NavLink className="nav-link" to="/profile"> {" "}Profile{" "} </NavLink></li>
               <li className="nav-item"><span onClick={props.handleLogout} className="nav-link logout-link"> {" "}Logout{" "} </span></li>
             </ul>
           ) : (
