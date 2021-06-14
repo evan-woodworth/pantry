@@ -8,6 +8,7 @@ const SearchBar = (props) => {
   const [searchType, setSearchType] = useState('name')
   const [result, setResult] = useState(null)
 
+<<<<<<< HEAD
   const handleInput = (e) => {
     setSearch(e.target.value)
   }
@@ -73,6 +74,15 @@ const SearchBar = (props) => {
       </form>
     </div>
   )
+=======
+const Welcome = (props) => {
+    return (
+        <div>
+            <h1>Pantry</h1>
+            <h3>Your kitchen is waiting...</h3>
+        </div>
+    )
+>>>>>>> dd8b3d2fe10d23c6484218957884c41a4f2d52f0
 }
 
 export default withRouter(SearchBar)
