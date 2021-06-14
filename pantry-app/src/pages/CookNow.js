@@ -20,61 +20,86 @@ const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 // }, [])
 
 function CookNow(props) {
-  let userRecipes = []
-  // let userPantries = []
-  const pantId = '';
-  let userShoppingLists = []
-  let allIngredients = []
-  let recipesCookNow = []
-  console.log('****************************')
-  console.log(props)
-  let userID = props.user
-  console.log(userID);
-  console.log('===================')
-  
-  console.log('===================')
-  //let id = userID.id
-  console.log('userID.id ' + userID.id);
-  //const payload = {notUser: props.user}
-  axios.get(`${REACT_APP_SERVER_URL}/api/users/recipes`)
-     .then(response => {
-      userRecipes = response.data 
-      console.log(response.data)
-     })
-  axios.get(`${REACT_APP_SERVER_URL}/api/users/pantries`)
-    .then(response => {
-    //  = response.data
-    pantId = response.data.pantryList[0]
-    console.log(response.data)
-    })   
-  axios.get(`${REACT_APP_SERVER_URL}/api/users/shoppingLists`)
-    .then(response => {
-    userShoppingLists = response.data
-    console.log(response.data)
-    })  
-  let userIngs = []
-  const payload = {
-    id: pantId
-  }
-   axios.put(`${REACT_APP_SERVER_URL}/api/pantries/ingredients`, payload)
-   .then(response => {
-    userIngs = response.data
-    console.log(response.data)
-    })   
+  const [userRecipes, setUserRecipes] = useState([])
+  const [recipesCookNow, setRecipesCookNow] = useState([]);
+  const [allIngs, setAllIngs] = useState([]);
+  const [finishedLoading, setFinishedLoading] = useState(false);
 
-  
+  useEffect(async ()=>{
+    const recipeResponse = await axios.get(`${REACT_APP_SERVER_URL}/api/users/recipes`);
+    const recipeList = recipeResponse.data;
+    console.log("user recipes",recipeList);
+    setUserRecipes(recipeList)
 
-  userRecipes.forEach((oneRecipe) => {
-    let haveIngredients = true
-    oneRecipe.ingredients.forEach((recipeIngredient) => {
-      if (!userIngs.includes(recipeIngredient.name)) {
-        haveIngredients = false;
-      }
-      if (haveIngredients) {
-        recipesCookNow.push(oneRecipe);
-      }
+    const allIngResponse = await axios.get(`${REACT_APP_SERVER_URL}/api/ingredients`);
+    const allIngData = allIngResponse.data.theIngredients;
+    console.log('allIngData',allIngData)
+    setAllIngs(allIngData);
+
+    const pantryResponse = await axios.get(`${REACT_APP_SERVER_URL}/api/users/pantries`);
+    const pantId = pantryResponse.data.pantryList[0]._id;
+    console.log("pantId",pantId);
+    const payload = {
+      id: pantId
+    }
+    const ingListResponse = await axios.put(`${REACT_APP_SERVER_URL}/api/pantries/ingredients`, payload);
+    const ingList = ingListResponse.data.ingredientList;
+    console.log("pantry ingredients",ingList);
+    let cookRecipeList = [];
+
+    recipeList.forEach((oneRecipe) => {
+      let haveIngredients = true;
+      oneRecipe.ingredients.forEach((recipeIngredient) => {
+        console.log(recipeIngredient)
+        if (!ingList.includes(recipeIngredient.name)) {
+          haveIngredients = false;
+        }
+        if (haveIngredients) {
+          cookRecipeList.push(oneRecipe);
+        }
+      })
     })
-  })
+    console.log("Recipe cook list", cookRecipeList)
+    setRecipesCookNow(cookRecipeList);
+    setFinishedLoading(true);
+
+
+    // axios.get(`${REACT_APP_SERVER_URL}/api/users/recipes`)
+    // .then(response => {
+    //   let recipeList = response.data;
+    //   setUserRecipes(recipeList);
+    //   console.log("user recipes",response.data)
+    //   axios.get(`${REACT_APP_SERVER_URL}/api/users/pantries`)
+    //   .then(response => {
+    //     const pantId = response.data.pantryList[0]._id;
+    //     console.log("pantId",pantId)
+    //     const payload = {
+    //       id: pantId
+    //     }
+    //     axios.put(`${REACT_APP_SERVER_URL}/api/pantries/ingredients`, payload)
+    //     .then(response => {
+    //       const ingList = response.data.ingredientList;
+    //       console.log("pantry ingredients",ingList);
+    //       let cookRecipeList = []
+    //       userRecipes.forEach((oneRecipe) => {
+    //         let haveIngredients = true;
+    //         oneRecipe.ingredients.forEach((recipeIngredient) => {
+    //           if (!ingList.includes(recipeIngredient.name)) {
+    //             haveIngredients = false;
+    //           }
+    //           if (haveIngredients) {
+    //             cookRecipeList.push(oneRecipe);
+    //           }
+    //         })
+    //       })
+    //       setRecipesCookNow(cookRecipeList);
+    //       setFinishedLoading(true);
+    //     })
+    //   })
+    // })
+  },[])
+
+
 
   // userPantries.forEach(pantPant => {
   //   const payload = {
@@ -88,13 +113,15 @@ function CookNow(props) {
   // })
  
   
-
+  if (!finishedLoading) {
+    return (<p>...Loading</p>)
+  }
   return (
     <div>
-    <h1>Cook Now</h1>
-    <ul>
-    {recipesCookNow.map((recipe) => <li>{recipe.name}</li>)}
-    </ul>
+      <h1>Cook Now</h1>
+      <ul>
+        {recipesCookNow.map((recipe) => <li>{recipe.name}</li>)}
+      </ul>
     </div>
   )
 };

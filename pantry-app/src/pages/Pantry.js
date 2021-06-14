@@ -45,7 +45,8 @@ const Pantry = (props) => {
       return ing.toLowerCase().includes(ingFilter.toLowerCase())
     })
     setIngsToDisplay(filterIngs);
-  },[allIngs])
+  },[allIngs,ingFilter])
+  
   const addIng = async (e, ing) => {
     const payload = {
       name: ing,
