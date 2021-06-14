@@ -21,7 +21,8 @@ const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 function CookNow(props) {
   let userRecipes = []
-  let userPantries = []
+  // let userPantries = []
+  const pantId = '';
   let userShoppingLists = []
   let allIngredients = []
   let recipesCookNow = []
@@ -42,7 +43,8 @@ function CookNow(props) {
      })
   axios.get(`${REACT_APP_SERVER_URL}/api/users/pantries`)
     .then(response => {
-    userPantries = response.data
+    //  = response.data
+    pantId = response.data.pantryList[0]
     console.log(response.data)
     })   
   axios.get(`${REACT_APP_SERVER_URL}/api/users/shoppingLists`)
@@ -51,7 +53,10 @@ function CookNow(props) {
     console.log(response.data)
     })  
   let userIngs = []
-   axios.get(`${REACT_APP_SERVER_URL}/api/pantries/ingredients`)
+  const payload = {
+    id: pantId
+  }
+   axios.put(`${REACT_APP_SERVER_URL}/api/pantries/ingredients`, payload)
    .then(response => {
     userIngs = response.data
     console.log(response.data)

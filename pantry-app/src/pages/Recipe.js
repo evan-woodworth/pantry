@@ -31,12 +31,14 @@ const Recipe = (props) => {
     video = 'No video instructions'
   };
 
-  let ingredientsList = [];
+  let ingredients = [];
   for (let i = 0; i < 20; i++) {
     let arrayIngredient = recipe[`strIngredient${i}`]
+    let arrayMeasurement = recipe[`strMeasure${i}`]
     if (arrayIngredient) {
-      ingredientsList.push({
-        name: arrayIngredient
+      ingredients.push({
+        name: arrayIngredient,
+        measurement: arrayMeasurement
       })
     }
   }
@@ -56,7 +58,7 @@ const Recipe = (props) => {
       tags: data.strTags,
       instructions: data.strInstructions,
       youtubeUrl: data.strYoutube,
-      ingredients: [...ingredientsList]
+      ingredients
     };
     console.log(payload.ingredients);
     axios.put(`${REACT_APP_SERVER_URL}/api/users/recipes`, payload)
