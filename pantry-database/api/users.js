@@ -37,7 +37,22 @@ const signup = async (req,res) => {
                 email,
                 password: hash
             })
-
+            console.log('Creating new pantry');
+            const newPantry = new Pantry({
+                name: `${name}'s Pantry`,
+                type: 'Personal'
+            })
+            newPantry.users.push({
+                newUser,
+                access: true,
+                admin: true
+            })
+            console.log('Creating new shopping list');
+            const newShoppingList = newPantry.shoppingLists.push({
+                name: `${name}'s Shopping List`
+            });
+            const savedNewPantry = await newPantry.save();
+            newUser.pantries.push(savedNewPantry);
             const savedNewUser = await newUser.save();
             
             res.json(savedNewUser);
@@ -155,18 +170,16 @@ const fetchShoppingLists = async (req,res) => {
         })
         res.json({shoppingLists});
     })
-
-    
 }
 
 const addRecipe = async (req,res) => {
     console.log( "Inside of put users/recipes route" );
     const { name, mealId, category, area, thumbnail, tags, 
-        instructions, ingredients, public, youtubeUrl } = req.body;
+        instructions, ingredients, public, youtubeUrl, user } = req.body;
 
     try {
         // retrieve user
-        let user = await User.findById(req.user.id);
+        let user = await User.findById(user.id);
 
         // retrieve recipe by id
         let recipe = await Recipe.findOne({ mealId });
