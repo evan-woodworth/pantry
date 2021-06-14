@@ -154,6 +154,7 @@ const pantries = async (req,res) => {
         res.json({pantryList});
     })
 }
+
 const fetchShoppingLists = async (req,res) => {
     console.log("Inside of users/shoppingLists route");
 

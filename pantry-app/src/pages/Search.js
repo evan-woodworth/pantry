@@ -3,13 +3,15 @@ import {Link} from "react-router-dom";
 
 
 const Search = (props) => {
-  const data = props.location.state
+  console.log(props);
+  const data = props.location.state;
+  const user = props.location.user;
 
   if (data) {
     var searchList = data.map((item, index) => {
       let location = {
         pathname: `/recipe/${item.idMeal}`,
-        state: item
+        state: item, user
       };
       return(
         <article className="meal" key={index}>
@@ -19,7 +21,7 @@ const Search = (props) => {
           <div className="meal-footer">  
             <h3>{item.strMeal}</h3>
             <p>{item.strCategory}</p>
-            <Link to={location} className="btn btn-primary btn-details"> Details </Link>
+            <Link to={location} user={user}className="btn btn-primary btn-details"> Details </Link>
           </div>
         </article>
       );

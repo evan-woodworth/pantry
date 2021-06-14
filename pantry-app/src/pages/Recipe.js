@@ -4,22 +4,24 @@ const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 
 const Recipe = (props) => {
+  console.log('RECIPE PROPS: ', props)
   const data = props.location.state
+  const mealId = data.idMeal;
+  const user = props.location.user ? props.location.user : props.user
   const [recipe, setRecipe] = useState(data);
 
   useEffect(() => {
-    let mealId = data.idMeal
     axios.get(`${REACT_APP_SERVER_URL}/api/mealdb/id/${mealId}`)
     .then(response => {
       let meal = response.data.meals[0];
       setRecipe(meal);
-      console.log(meal)
+      console.log('Meal Information:', meal)
     }).catch(error => {
       console.log('------------ RECIPE ERROR ------------');
       console.log(error)
     });
-  }, []);
-  
+  }, [mealId]);
+
   let video = '';
   if (recipe.strYoutube) {
     video = <a href={recipe.strYoutube}>Instructional Video</a>
@@ -27,6 +29,33 @@ const Recipe = (props) => {
     // video = <p>No video instructions</p>
     video = 'No video instructions'
   };
+
+  const handleFavorite = () => {
+    let payload = {
+      userId: user.id,
+      name: data.strMeal,
+      mealId: data.idMeal,
+      ingredients: ['1', '2', '3']
+    };
+    console.log(payload.user, payload.mealId, payload.name)
+    axios.put(`${REACT_APP_SERVER_URL}/api/users/recipes`, payload)
+    .then(response => {
+      console.log(response.data);
+    }).catch(error => {
+      console.log('------------ FAVORITE ERROR ------------')
+      console.log(error);
+    })
+  }
+
+  const fetchRecipes = () => {
+    axios.get(`${REACT_APP_SERVER_URL}/api/recipes`)
+    .then(response => {
+      console.log(response.data);
+    }).catch(error => {
+      console.log('------------ RETRIEVE ERROR ------------')
+      console.log(error);
+    })
+  }
 
   return (
     // <div>
@@ -61,7 +90,9 @@ const Recipe = (props) => {
           <p><span className='food-data'> Info:</span>{recipe.strArea}</p>
           <p><span className='food-data'> Instructions:</span>{recipe.strInstructions}</p>
           <p><span className='food-data'> Video Instructions:</span>{video}</p>
+          <button onClick={handleFavorite} className="btn btn-secondary">Favorite</button>
           <button onClick={props.history.goBack} className="btn btn-primary">Back</button>
+          <button onClick={fetchRecipes} className="btn btn-secondary">Fetch Data</button>
         </div>
       </div>
     </section>
