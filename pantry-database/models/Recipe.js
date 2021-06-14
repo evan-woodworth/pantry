@@ -14,6 +14,7 @@ const recipeSchema = new Schema({
     instruction: String,
     ingredients: [{
         ingredient: {type: mongoose.Schema.Types.ObjectId, ref: "Ingredient"},
+        name: String,
         measurement: String
     }],
     author: {type: mongoose.Schema.Types.ObjectId, ref: "User"},

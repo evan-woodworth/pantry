@@ -130,17 +130,23 @@ const recipes = async (req,res) => {
     console.log("Inside of users/recipes route");
 
     // retrieve user details
-    let user = await User.findById(req.user.id);
-
-    // retrieve recipes associated with user
-    let recipeList = [];
-    user.recipes.forEach(async item=>{
-        let theRecipe = await Recipe.findById(item.id);
-        recipeList.push(theRecipe);
+    User.findById(req.user.id).populate("recipes")
+    .populate("ingredients.ingredient")
+    .exec((err, user)=>{
+        if (err) console.log("error",err);
+        console.log(user.recipes.ingredients)
+        res.json(user.recipes);
     })
+
+    // // retrieve recipes associated with user
+    // let recipeList = [];
+    // user.recipes.forEach(async item=>{
+    //     let theRecipe = await Recipe.findById(item.id);
+    //     recipeList.push(theRecipe);
+    // })
      
-    // display recipes
-    res.json(recipeList);
+    // // display recipes
+    // res.json(recipeList);
 }
 
 const pantries = async (req,res) => {
@@ -196,6 +202,7 @@ const addRecipe = async (req,res) => {
                 let addIng = Ingredient.findOne({name:ing.name});
                 recipe.ingredients.push({
                     addIng,
+                    name: addIng.name,
                     measurement: ing.measurement
                 })
             })

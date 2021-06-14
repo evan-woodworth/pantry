@@ -10,7 +10,7 @@ const Search = (props) => {
   if (data) {
     var searchList = data.map((item, index) => {
       let location = {
-        pathname: `/recipe/${item.idMeal}`,
+        pathname: `/recipe/`,
         state: item, user
       };
       return(

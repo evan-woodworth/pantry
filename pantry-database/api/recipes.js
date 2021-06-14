@@ -20,8 +20,12 @@ const fetchOneById = async (req, res) => {
     console.log('--- Inside of Recipe fetchOneById ---');
     console.log(`Searching for ${id}`);
     try {
-        let theRecipe = await Recipe.findById(id);
-        res.json({ theRecipe });
+        Recipe.findById(id).populate("ingredients.ingredient")
+        .exec((err, theRecipe)=>{
+            if (err) console.log("error", err);
+            console.log(theRecipe)
+            res.json({ theRecipe });
+        })
     } catch (error) {
         console.log("Error inside of /recipes/id/:id");
         console.log(error);
@@ -44,7 +48,6 @@ const fetchAllByName = async (req, res) => {
         return res.status(400).json({message:'Recipes not found, please try again.'})
     }
 }
-
 
 // fetch all recipes
 const fetchAll = async (req, res) => {
