@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 
 
 const Search = (props) => {
-  console.log(props);
+  console.log('SEARCH PROPS: ', props);
   const data = props.location.state;
   const user = props.location.user;
 

@@ -5,10 +5,11 @@ const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 const Recipe = (props) => {
   console.log('RECIPE PROPS: ', props)
-  const data = props.location.state
+  const data = props.location.state ? props.location.state : props.recipe;
   const mealId = data.idMeal;
-  const user = props.location.user ? props.location.user : props.user
+  const userData = props.location.user ? props.location.user : props.user;
   const [recipe, setRecipe] = useState(data);
+  console.log(userData);
 
   useEffect(() => {
     axios.get(`${REACT_APP_SERVER_URL}/api/mealdb/id/${mealId}`)
@@ -30,14 +31,34 @@ const Recipe = (props) => {
     video = 'No video instructions'
   };
 
+  let ingredientsList = [];
+  for (let i = 0; i < 20; i++) {
+    let arrayIngredient = recipe[`strIngredient${i}`]
+    if (arrayIngredient) {
+      ingredientsList.push({
+        name: arrayIngredient
+      })
+    }
+  }
+
   const handleFavorite = () => {
     let payload = {
-      userId: user.id,
+      user: {
+        id: userData.id,
+        email: userData.email,
+        name: userData.name
+      },
       name: data.strMeal,
       mealId: data.idMeal,
-      ingredients: ['1', '2', '3']
+      category: data.strCategory,
+      area: data.strArea,
+      thumbnail: data.strMealThumb,
+      tags: data.strTags,
+      instructions: data.strInstructions,
+      youtubeUrl: data.strYoutube,
+      ingredients: [...ingredientsList]
     };
-    console.log(payload.user, payload.mealId, payload.name)
+    console.log(payload.ingredients);
     axios.put(`${REACT_APP_SERVER_URL}/api/users/recipes`, payload)
     .then(response => {
       console.log(response.data);
