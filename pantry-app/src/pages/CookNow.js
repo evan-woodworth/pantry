@@ -23,6 +23,8 @@ function CookNow(props) {
   let userRecipes = []
   let userPantries = []
   let userShoppingLists = []
+  let allIngredients = []
+  let recipesCookNow = []
   console.log('****************************')
   console.log(props)
   let userID = props.user
@@ -33,27 +35,42 @@ function CookNow(props) {
   //let id = userID.id
   console.log('userID.id ' + userID.id);
   //const payload = {notUser: props.user}
-  // axios.get(`${REACT_APP_SERVER_URL}/api/users/recipes`)
-  //    .then(response => {
-  //     userRecipes = response.data 
-  //     console.log(response.data)
-  //    })
+  axios.get(`${REACT_APP_SERVER_URL}/api/users/recipes`)
+     .then(response => {
+      userRecipes = response.data 
+      console.log(response.data)
+     })
   axios.get(`${REACT_APP_SERVER_URL}/api/users/pantries`)
     .then(response => {
     userPantries = response.data
     console.log(response.data)
     })   
-  // axios.get(`${REACT_APP_SERVER_URL}/api/users/shoppingLists`)
-  //   .then(response => {
-  //   userShoppingLists = response.data
-  //   console.log(response.data)
-  //   })  
+  axios.get(`${REACT_APP_SERVER_URL}/api/users/shoppingLists`)
+    .then(response => {
+    userShoppingLists = response.data
+    console.log(response.data)
+    })  
   let userIngs = []
    axios.get(`${REACT_APP_SERVER_URL}/api/pantries/ingredients`)
    .then(response => {
     userIngs = response.data
     console.log(response.data)
     })   
+
+  
+
+  userRecipes.forEach((oneRecipe) => {
+    let haveIngredients = true
+    oneRecipe.ingredients.forEach((recipeIngredient) => {
+      if (!userIngs.includes(recipeIngredient.name)) {
+        haveIngredients = false;
+      }
+      if (haveIngredients) {
+        recipesCookNow.push(oneRecipe);
+      }
+    })
+  })
+
   // userPantries.forEach(pantPant => {
   //   const payload = {
   //     id: pantPant.id
@@ -68,8 +85,13 @@ function CookNow(props) {
   
 
   return (
+    <div>
     <h1>Cook Now</h1>
-    )
+    <ul>
+    {recipesCookNow.map((recipe) => <li>{recipe.name}</li>)}
+    </ul>
+    </div>
+  )
 };
 
 
