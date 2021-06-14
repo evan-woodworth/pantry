@@ -14,12 +14,11 @@
 // If user is not signed in, all recipeIngredients are added to shoppingList
 
 import React, { useState, useEffect } from 'react'
-import Data from './Ingredients'
-import Api from '../AppTwo'
+import Ingredients from './Ingredients'
+
 import { AppProvider } from '../context'
 import MealList from '../components/RecipeApi/MealList'
 import SearchForm from '../components/RecipeApi/SearchForm'
-
 
 const getLocalStorage = () => {
   let list = localStorage.getItem('list')
@@ -157,15 +156,13 @@ function App() {
           </button>
         </div>
       )}
-      <div>
-        <Data />
-      </div>
+      <div></div>
       <div>
         <AppProvider>
-          <Api />
+         
+          <Ingredients /> 
           <SearchForm />
           <MealList />
-          
         </AppProvider>
       </div>
     </section>
@@ -173,9 +170,3 @@ function App() {
 }
 
 export default App
-
-
-
-
-
-
