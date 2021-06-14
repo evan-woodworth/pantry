@@ -4,22 +4,25 @@ const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 
 const Recipe = (props) => {
-  const data = props.location.state
+  console.log('RECIPE PROPS: ', props)
+  const data = props.location.state ? props.location.state : props.recipe;
+  const mealId = data.idMeal;
+  const userData = props.location.user ? props.location.user : props.user;
   const [recipe, setRecipe] = useState(data);
+  console.log(userData);
 
   useEffect(() => {
-    let mealId = data.idMeal
     axios.get(`${REACT_APP_SERVER_URL}/api/mealdb/id/${mealId}`)
     .then(response => {
       let meal = response.data.meals[0];
       setRecipe(meal);
-      console.log(meal)
+      console.log('Meal Information:', meal)
     }).catch(error => {
       console.log('------------ RECIPE ERROR ------------');
       console.log(error)
     });
-  }, []);
-  
+  }, [mealId]);
+
   let video = '';
   if (recipe.strYoutube) {
     video = <a href={recipe.strYoutube}>Instructional Video</a>
@@ -27,6 +30,55 @@ const Recipe = (props) => {
     // video = <p>No video instructions</p>
     video = 'No video instructions'
   };
+
+  let ingredients = [];
+  for (let i = 0; i < 20; i++) {
+    let arrayIngredient = recipe[`strIngredient${i}`]
+    let arrayMeasurement = recipe[`strMeasure${i}`]
+    if (arrayIngredient) {
+      ingredients.push({
+        name: arrayIngredient,
+        measurement: arrayMeasurement
+      })
+    }
+  }
+
+  const handleFavorite = () => {
+    let payload = {
+      user: {
+        id: userData.id,
+        email: userData.email,
+        name: userData.name
+      },
+      name: data.strMeal,
+      mealId: data.idMeal,
+      category: data.strCategory,
+      area: data.strArea,
+      thumbnail: data.strMealThumb,
+      tags: data.strTags,
+      instructions: data.strInstructions,
+      youtubeUrl: data.strYoutube,
+      ingredients
+    };
+    console.log(payload.ingredients);
+    axios.put(`${REACT_APP_SERVER_URL}/api/users/recipes`, payload)
+    .then(response => {
+      console.log(response.data);
+    }).catch(error => {
+      console.log('------------ FAVORITE ERROR ------------')
+      console.log(error);
+    })
+  }
+
+  const fetchRecipes = () => {
+    axios.get(`${REACT_APP_SERVER_URL}/api/recipes`)
+    .then(response => {
+      console.log(response.data);
+    }).catch(error => {
+      console.log('------------ RETRIEVE ERROR ------------')
+      console.log(error);
+    })
+  }
 
   return (
     // <div>
@@ -61,7 +113,9 @@ const Recipe = (props) => {
           <p><span className='food-data'> Info:</span>{recipe.strArea}</p>
           <p><span className='food-data'> Instructions:</span>{recipe.strInstructions}</p>
           <p><span className='food-data'> Video Instructions:</span>{video}</p>
+          <button onClick={handleFavorite} className="btn btn-secondary">Favorite</button>
           <button onClick={props.history.goBack} className="btn btn-primary">Back</button>
+          <button onClick={fetchRecipes} className="btn btn-secondary">Fetch Data</button>
         </div>
       </div>
     </section>

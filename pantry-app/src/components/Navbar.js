@@ -16,7 +16,7 @@ const Navbar = (props) => {
             <li className="nav-item">{" "}<NavLink className="nav-link" to="/about"> {" "}About{" "} </NavLink></li>
             <li className="nav-item">{" "}<NavLink className="nav-link" to="/shoppinglist"> {" "}Shopping List{" "} </NavLink></li>
           </ul>
-          <SearchBar />
+          <SearchBar user={props.user}/>
 
           {props.isAuth ? (
             <ul className="navbar-nav ml-auto">

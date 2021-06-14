@@ -179,7 +179,7 @@ const addRecipe = async (req,res) => {
 
     try {
         // retrieve user
-        let user = await User.findById(user.id);
+        let theUser = await User.findById(user.id);
 
         // retrieve recipe by id
         let recipe = await Recipe.findOne({ mealId });
@@ -191,7 +191,7 @@ const addRecipe = async (req,res) => {
                 name, mealId, category, area, thumbnail, tags,
                 instructions, public, youtubeUrl
             })
-            recipe.author = user;
+            recipe.author = theUser;
             ingredients.forEach(async ing => {
                 let addIng = Ingredient.findOne({name:ing.name});
                 recipe.ingredients.push({
@@ -203,10 +203,10 @@ const addRecipe = async (req,res) => {
             res.json(savedRecipe)
         }
         // add recipe to user
-        user.recipes.push(recipe);
+        theUser.recipes.push(recipe);
 
         // save user
-        user.save()
+        theUser.save()
 
     } catch (error) {
         console.log("Error inside of put users/recipes route");

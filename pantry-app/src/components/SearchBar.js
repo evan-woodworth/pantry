@@ -8,6 +8,7 @@ const SearchBar = (props) => {
   const [search, setSearch] = useState('');
   const [searchType, setSearchType] = useState('name');
   const [result, setResult] = useState(null);
+  const user = props.user;
 
   const handleInput = (e) => {
     setSearch(e.target.value);
@@ -20,16 +21,17 @@ const SearchBar = (props) => {
   useEffect(() => {
     if (props.history.location.state === false) {
       console.log('Nothing!');
-      alert('No search match.');
+      alert('No search matches.');
     } else if (result) {
-      props.history.push('/search', result);
+      props.history.push({
+        pathname: '/search',
+        state: result, user
+      });
     }
-  }, [props.history, result]);
+  }, [props.history, user, result]);
 
   const submitForm = (e) => {
     e.preventDefault();
-    // console.log('User Input:', search)
-    // console.log('Search Type:', searchType)
     axios.get(`${REACT_APP_SERVER_URL}/api/mealdb/${searchType}/${search}`)
     .then(response => {
       setResult(response.data.meals);
