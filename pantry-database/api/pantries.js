@@ -57,11 +57,11 @@ const fetchAll = async (req, res) => {
 const createPantry = async (req,res) => {
     console.log('--- Inside of create pantry ---')
     console.log('req.body ==>', req.body)
-    // fetch user
-    const user = await User.findById(req.user.id);
-    const {name, type} = req.body;
 
     try {
+        // fetch user
+        const user = await User.findById(req.user.id);
+        const {name, type} = req.body;
         console.log('Creating new pantry');
         const newPantry = new Pantry({
             name,
@@ -110,44 +110,85 @@ const createShoppingList = async (req,res) => {
 }
 // fetch all ingredients from pantry
 const fetchIngredients = async (req, res) => {
-    // const { id } = req.body;
     console.log('--- Inside of Pantry fetchIngredients ---');
     console.log(`Searching for ingredients from pantry`);
     console.log(req.body)
-    // try {
-    //     let thePantry = await Pantry.findById(id);
-    //     let theIngredients = thePantry.ingredients;
-    //     res.json({ theIngredients });
-    // } catch (error) {
-    //     console.log("Error inside of /pantries/ingredients");
-    //     console.log(error);
-    //     return res.status(400).json({message:'Ingredients not found, please try again.'})
-    // }
-    User.findById(req.user.id).populate("pantries")
-    .populate("ingredients")
-    .exec((err, user)=>{
-        if (err) console.log("there was an error.");
-        console.log(user)
-        const ingredientList = [];
-        user.pantries.forEach(pantry =>{
-            pantry.ingredients.forEach(ingredient => {
-                if (!ingredientList.includes(ingredient.name)) {
-                    ingredientList.push(ingredient.name)
-                }
-            })
+    const { id } = req.body;
+    try {
+        Pantry.findById(id).populate("ingredients.ingredient")
+        .exec((err, pantry)=>{
+            if (err) console.log("there was an error.");
+            console.log('pantry',pantry)
+            const ingredientList = [];
+            console.log(pantry.ingredients);
+            pantry.ingredients.forEach(ing=>ingredientList.push(ing.ingredient.name))
+            console.log('----- ingredient list -----')
+            console.log(ingredientList)
+            console.log('----- end of ingredient list -----')
+            res.json({ingredientList});
         })
-        console.log(ingredientList)
-        res.json({ingredientList});
-    })
+    } catch (error) {
+        console.log('Error inside of /api/pantries/ingredients');
+        console.log(error);
+        return res.status(400).json({message: 'Error occurred, please try again...'})
+    }
 }
 
+const addIngredient = async (req,res) => {
+    console.log('--- Inside of Pantry Add Ingredient ---');
+    const { name, id } = req.body;
+    
+    try {
+        const thePantry = await Pantry.findById(id);
+        const ingredient = await Ingredient.findOne({name});
+        thePantry.ingredients.push({
+            ingredient
+        })
+        const savedPantry = await thePantry.save();
+        console.log(savedPantry)
+        res.json(savedPantry);
+    } catch (error) {
+        console.log('Error inside of /api/pantries/addIngredient');
+        console.log(error);
+        return res.status(400).json({message: 'Error occurred, please try again...'})
+    }
+}
+
+const deleteIngredient = async (req,res) => {
+    console.log('--- Inside of Pantry Delete Ingredient ---');
+    const { name, id } = req.body;
+    
+    try {
+        const ingredient = await Ingredient.findOne({name});
+        let refId = '';
+        Pantry.findById(id).populate("ingredients.ingredient")
+        .exec((err, pantry)=>{
+            if (err) console.log("error, y'all");
+            pantry.ingredients.forEach(ing=>{
+                if (ing.ingredient.name === name) refId = ing._id;
+            })
+            // console.log("pantry ingredients",pantry.ingredients)
+            console.log("Removing Ingredient: ",pantry.ingredients.id(refId));
+            pantry.ingredients.id(refId).remove();
+            pantry.save();
+        })
+        // thePantry.ingredients.id(ingredient).remove();
+        // console.log('removed ingredient')
+        // const savedPantry = await thePantry.save();
+        // res.json(savedPantry);
+    } catch (error) {
+        console.log('Error inside of /api/pantries/deleteIngredient');
+        console.log(error);
+        return res.status(400).json({message: 'Error occurred, please try again...'})
+    }
+}
 
 // routes
 // get
 router.get('/test', passport.authenticate('jwt', { session: false }), test)
 router.get('/id/:id', passport.authenticate('jwt', { session: false }), fetchOneById)
 router.get('/name/:name', passport.authenticate('jwt', { session: false }), fetchAllByName)
-router.get('/ingredients', passport.authenticate('jwt', { session: false }), fetchIngredients)
+router.put('/ingredients', passport.authenticate('jwt', { session: false }), fetchIngredients)
 router.get('/', passport.authenticate('jwt', { session: false }), fetchAll)
 
 // post
@@ -155,7 +196,10 @@ router.post('/create', passport.authenticate('jwt', { session: false }), createP
 router.post('/shoppinglist/new', passport.authenticate('jwt', { session: false }), createShoppingList)
 
 // put
+router.put('/addIngredient', passport.authenticate('jwt', { session: false }), addIngredient)
 
+// delete
+router.put('/deleteIngredient', passport.authenticate('jwt', { session: false }), deleteIngredient)
 
 // export
 module.exports = router; 
